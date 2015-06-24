@@ -12,7 +12,7 @@ class Shell
       while true
         print @prompt
         cmds = get_input
-        exec_cmd(cmd.to_sym, args) unless cmd == ''
+        cmds.each { |cmd| exec_cmd(cmd[:cmd], cmd[:args]) }
       end
     rescue SystemExit, Interrupt
       abort
@@ -24,12 +24,12 @@ class Shell
   def get_input
     # "ls | echo blah"" becomes [{cmd: 'ls', args:[]}, {cmd: 'echo', args: ['blah']}]
     input = gets.chomp.split("|").map { |x| x.split("\s") }
-    input.map { |x| {cmd: x[0], args: x[1..-1]} }
+    input.map { |x| {cmd: x[0].to_sym, args: x[1..-1]} }
   end
 
   def exec_cmd(cmd, args)
     if command_available?(cmd)
-      puts Commands.send(cmd, *args)
+      Commands.send(cmd, *args)
     else
       puts "Command not found: #{cmd}"
     end
