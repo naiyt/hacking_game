@@ -3,40 +3,41 @@ module Commands
   STDOUT = :stdout
   STDIN = :stdin
 
-  def self.exit
+  def self.exit(args, input=STDIN)
     abort
   end
 
-  def self.help(out=STDOUT)
+  def self.help(args, input=STDIN)
     data  = "Available commands:\n#{AVAILABLE_COMMANDS.join("\n")}"
     pipe_out(data, out)
   end
 
-  def self.ls(out=STDOUT)
+  def self.ls(args, input=STDIN)
   end
 
-  def self.cd(out=STDOUT)
+  def self.cd(args, input=STDIN)
   end
 
-  def self.time(out=STDOUT)
-    pipe_out(Time.now(), out)
+  def self.time(args, input=STDIN)
+    Time.now()
   end
 
-  def self.echo(data='', input=STDIN, out=STDOUT)
-    pipe_out(data, out)
+  def self.echo(args, input=STDIN)
+    if args.length > 0
+      data = args.join(" ")
+    else
+      data = pipe_in(input)
+    end
+    data
   end
 
   private
 
-  def self.pipe_out(data, out)
-    if out == STDOUT
-      stdout(data)
+  def self.pipe_in(input)
+    if input == STDIN
+      gets
     else
-      out.call(data)
+      input
     end
-  end
-
-  def self.stdout(output)
-    puts output
   end
 end

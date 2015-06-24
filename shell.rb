@@ -12,7 +12,8 @@ class Shell
       while true
         print @prompt
         cmds = get_input
-        cmds.each { |cmd| exec_cmd(cmd[:cmd], cmd[:args]) }
+        cmds = set_call_chain(cmds) unless cmds.length == 0
+        exec_cmds(cmds)
       end
     rescue SystemExit, Interrupt
       abort
@@ -27,12 +28,29 @@ class Shell
     input.map { |x| {cmd: x[0].to_sym, args: x[1..-1]} }
   end
 
-  def exec_cmd(cmd, args)
-    if command_available?(cmd)
-      Commands.send(cmd, *args)
-    else
-      puts "Command not found: #{cmd}"
+  def set_call_chain(cmds)
+    cmds[0][:stdin] = Commands::STDIN
+    cmds = cmds.map.each_with_index do |cmd, i|
+      prev_cmd = cmds[i-1]
+      prev_cmd[:stdout] = lambda { exec_cmd(cmd) }
+      cmd
     end
+    cmds[-1][:stdout] = Commands::STDOUT
+    cmds
+  end
+
+  def exec_cmds(cmds)
+    result = Commands::STDIN
+    cmds.each do |cmd|
+      cmd_sym = cmd[:cmd]
+      cmd_args = cmd[:args]
+      if command_available?(cmd_sym)
+        result = Commands.send(cmd_sym, args=cmd_args, input=result)
+      else
+        puts "Command not found: #{cmd_sym}"
+      end
+    end
+    puts result unless result == Commands::STDIN
   end
 
   def command_available?(cmd)
