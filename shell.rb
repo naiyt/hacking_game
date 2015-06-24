@@ -11,14 +11,20 @@ class Shell
     begin
       while true
         print @prompt
-        input = gets.chomp.split("\s")
-        cmd = input[0]
-        args = input[1..-1]
+        cmds = get_input
         exec_cmd(cmd.to_sym, args) unless cmd == ''
       end
     rescue SystemExit, Interrupt
       abort
     end
+  end
+
+  private
+
+  def get_input
+    # "ls | echo blah"" becomes [{cmd: 'ls', args:[]}, {cmd: 'echo', args: ['blah']}]
+    input = gets.chomp.split("|").map { |x| x.split("\s") }
+    input.map { |x| {cmd: x[0], args: x[1..-1]} }
   end
 
   def exec_cmd(cmd, args)
