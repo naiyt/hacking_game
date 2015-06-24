@@ -1,5 +1,5 @@
 module Commands
-  AVAILABLE_COMMANDS = [:exit, :ls, :cd, :help, :time]
+  AVAILABLE_COMMANDS = [:exit, :ls, :cd, :help, :time, :echo]
 
   def self.exit
     abort
@@ -17,5 +17,9 @@ module Commands
 
   def self.time
     Time.now()
+  end
+
+  def self.echo(text='')
+    text
   end
 end
