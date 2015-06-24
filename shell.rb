@@ -4,6 +4,7 @@ class Shell
 
   def initialize(prompt="[cmd]: ")
     @prompt = prompt
+    puts "Welcome to a sweet shell! Type help for help"
   end
 
   def run
@@ -20,7 +21,7 @@ class Shell
 
   def exec_cmd(cmd)
     if command_available?(cmd)
-      Commands.send(cmd)
+      puts Commands.send(cmd)
     else
       puts "Command not found: #{cmd}"
     end
