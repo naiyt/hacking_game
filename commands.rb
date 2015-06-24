@@ -19,7 +19,7 @@ module Commands
   end
 
   def self.time(out=STDOUT)
-    Time.now()
+    pipe_out(Time.now(), out)
   end
 
   def self.echo(data='', input=STDIN, out=STDOUT)
