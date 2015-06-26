@@ -1,8 +1,9 @@
 require_relative 'commands/commands_helper'
+require_relative 'filesystem/filesystem'
 
 class Shell
-
   def initialize(debug=false, prompt="[cmd]: ")
+    binding.pry
     @prompt = prompt
     @debug = debug
     @runner = Commands::CommandRunner.instance
