@@ -2,7 +2,7 @@ require 'pry'
 require 'singleton'
 
 module Commands
-  AVAILABLE_COMMANDS = [:exit, :ls, :cd, :help, :time, :echo]
+  AVAILABLE_COMMANDS = [:exit, :ls, :cd, :help, :time, :echo, :grep]
   STDOUT = :stdout
   STDIN = :stdin
 
@@ -36,8 +36,12 @@ module Commands
       @runner = CommandRunner.instance
     end
 
-    def input
-      if @runner.input == STDIN
+    def from_stdin?
+      @runner.input == STDIN
+    end
+
+    def get_input
+      if from_stdin?
         gets
       else
         @runner.input

@@ -1,4 +1,6 @@
 require_relative "shell"
 
-shell = Shell.new
+debug = true
+
+shell = Shell.new(debug: debug)
 shell.run
