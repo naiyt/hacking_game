@@ -19,7 +19,7 @@ module Filesystem
           current_parent.add_child(directory)
         elsif directory.is_a? Hash
           nested_parent = current_parent.add_child(directory.keys[0])
-          add_all_defaults(directory.values, nested_parent)
+          add_all_defaults(directory.values.flatten, nested_parent)
         end
       end
     end
