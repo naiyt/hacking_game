@@ -1,0 +1,57 @@
+require 'pry'
+require 'singleton'
+
+module Commands
+  AVAILABLE_COMMANDS = [:exit, :ls, :cd, :help, :time, :echo]
+  STDOUT = :stdout
+  STDIN = :stdin
+
+  class CommandRunner
+    include Singleton
+    attr_reader :input, :args
+
+    def initialize
+      @input = STDIN
+      @commands = {}
+    end
+
+    def execute(cmd_sym, args, input)
+      @commands[cmd_sym] ||= klass(cmd_sym).new
+      @input = input
+      @args = args
+      @commands[cmd_sym].run
+    end
+
+    # http://stackoverflow.com/a/5924541/1026980
+    def klass(cmd_sym)
+      "Commands::#{cmd_sym.capitalize}".split('::').inject(Object) {|o,c| o.const_get c}
+    end
+  end
+
+  class NotImplemented < StandardError
+  end
+
+  class Command
+    def initialize
+      @runner = CommandRunner.instance
+    end
+
+    def input
+      if @runner.input == STDIN
+        gets
+      else
+        @runner.input
+      end
+    end
+
+    def args
+      @runner.args
+    end
+
+    def run
+      raise NotImplemented 'You must implement a Run method in your command'
+    end
+  end
+
+  Dir['commands/bin/*.rb'].each { |file| require File.expand_path file }
+end

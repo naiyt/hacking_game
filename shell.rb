@@ -1,9 +1,10 @@
-require_relative 'commands'
+require_relative 'commands/commands_helper'
 
 class Shell
 
   def initialize(prompt="[cmd]: ")
     @prompt = prompt
+    @runner = Commands::CommandRunner.instance
     puts "Welcome to a sweet shell! Type help for help"
   end
 
@@ -12,7 +13,6 @@ class Shell
       while true
         print @prompt
         cmds = get_input
-        cmds = set_call_chain(cmds) unless cmds.length == 0
         exec_cmds(cmds)
       end
     rescue SystemExit, Interrupt
@@ -28,32 +28,24 @@ class Shell
     input.map { |x| {cmd: x[0].to_sym, args: x[1..-1]} }
   end
 
-  def set_call_chain(cmds)
-    cmds[0][:stdin] = Commands::STDIN
-    cmds = cmds.map.each_with_index do |cmd, i|
-      prev_cmd = cmds[i-1]
-      prev_cmd[:stdout] = lambda { exec_cmd(cmd) }
-      cmd
-    end
-    cmds[-1][:stdout] = Commands::STDOUT
-    cmds
-  end
-
   def exec_cmds(cmds)
-    result = Commands::STDIN
+    next_input = default_in
     cmds.each do |cmd|
-      cmd_sym = cmd[:cmd]
-      cmd_args = cmd[:args]
+      cmd_sym, cmd_args = cmd[:cmd], cmd[:args]
       if command_available?(cmd_sym)
-        result = Commands.send(cmd_sym, args=cmd_args, input=result)
+        next_input = @runner.execute(cmd_sym, cmd_args, next_input)
       else
         puts "Command not found: #{cmd_sym}"
       end
     end
-    puts result unless result == Commands::STDIN
+    puts next_input unless next_input == default_in
   end
 
   def command_available?(cmd)
     Commands::AVAILABLE_COMMANDS.include? cmd
+  end
+
+  def default_in
+    Commands::STDIN
   end
 end
