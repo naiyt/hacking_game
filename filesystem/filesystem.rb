@@ -2,6 +2,15 @@ require 'singleton'
 require 'yaml'
 
 module Filesystem
+  class Table
+    include Singleton
+    attr_accessor :table
+
+    def initialize
+      @table = {}
+    end
+  end
+
   class Filesystem
     include Singleton
     attr_reader :pwd
@@ -9,8 +18,8 @@ module Filesystem
     def initialize
       default_fs = YAML.load_file './filesystem/default_fs.yaml'
       @root = Directory.new('root')
-      add_all_defaults(default_fs['root'], @root)
       @pwd = @root
+      add_all_defaults(default_fs['root'], @root)
     end
 
     def add_all_defaults(directories, current_parent)
@@ -31,6 +40,19 @@ module Filesystem
         puts "#{directory} does not exist"
       end
     end
+
+    def ls(path)
+      if path[0] == '/'
+        Table.instance.table[path].ls
+      else
+        if pwd.path_to == '/'
+          abs_path = "/#{path}"
+        else
+          abs_path = "#{pwd.path_to}/#{path}"
+        end
+        Table.instance.table[abs_path].ls
+      end
+    end
   end
 
   class AlreadyExistsError < StandardError
@@ -45,6 +67,7 @@ module Filesystem
       @parent = parent
       @children = children
       add_default_refs
+      Table.instance.table[path_to] = self
     end
 
     def add_child(name)
