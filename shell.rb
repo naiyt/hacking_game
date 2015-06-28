@@ -2,14 +2,18 @@ require_relative 'commands/commands_helper'
 require_relative 'filesystem/filesystem'
 
 class Shell
+  attr_accessor :history
+
   def initialize(debug=false, prompt="[cmd]: ")
     @prompt = prompt
     @debug = debug
     @runner = Commands::CommandRunner.instance
+    @history = []
     puts "Welcome to a sweet shell! Type help for help"
   end
 
   def run
+    @runner.shell = self
     begin
       while true
         print @prompt
@@ -27,8 +31,11 @@ class Shell
   def get_input
     # TODO: Only works with single quotes so far
 
+    input = gets.chomp
+    @history << input
+
     # Split commands by pipes
-    input = gets.chomp.split("|")
+    input = input.split("|")
 
     # Strip beginning and ending whitespace
     input = input.map { |x| x.strip }

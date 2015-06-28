@@ -2,13 +2,14 @@ require 'pry'
 require 'singleton'
 
 module Commands
-  AVAILABLE_COMMANDS = [:exit, :ls, :cd, :help, :time, :echo, :grep, :pwd, :mkdir]
+  AVAILABLE_COMMANDS = [:exit, :ls, :cd, :help, :time, :echo, :grep, :pwd, :mkdir, :history]
   STDOUT = :stdout
   STDIN = :stdin
 
   class CommandRunner
     include Singleton
     attr_reader :input, :args
+    attr_accessor :shell
 
     def initialize
       @input = STDIN

@@ -9,12 +9,14 @@ TODO next:
     - rmdir
     - rm
     - touch
+    - man
 - Files
 - differentiate between files and directories
-- command history (and pressing up to view previous commands)
+- navigate cmd history with arrow keys
 - better handling for "available_commands"
 - cd into multiple directories
 - save state of filesystem
 - multiple commands with ; or && (but not chaining stdout/stdin)
 - support for stderr
 - better interpretation of ".." and "." into cd and ls
+- better support for renaming commands (e.g., say I don't want to call the manual pages command by its typical name)
