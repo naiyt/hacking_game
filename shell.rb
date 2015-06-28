@@ -26,16 +26,16 @@ class Shell
     end
   end
 
-  private
-
   def get_input
     # TODO: Only works with single quotes so far
 
     # Using readline implemented by: https://github.com/JEG2/highline
     input = ask(@prompt) { |q| q.readline = true }
-
     @history << input
+    format_input(input)
+  end
 
+  def format_input(input)
     # Split commands by pipes
     input = input.split("|")
 

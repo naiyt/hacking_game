@@ -1,42 +1,55 @@
-require 'rspec'
-require_relative '../commands/commands_helper'
-require_relative '../filesystem/filesystem'
+require 'spec_helper'
 
 describe 'commands' do
-  let(:runner) { Commands::CommandRunner.instance }
-  let(:fs) { Filesystem::Filesystem.instance }
+  let(:shell) { Shell.new }
 
-  describe 'cd' do
+  def exec(cmd)
+    shell.exec_cmds(shell.format_input(cmd))
+  end
+
+  def mock_stdout(cmd, output)
+    expect(STDOUT).to receive(:puts).with(output)
+    exec(cmd)
+  end
+
+  describe 'cd and pwd' do
     before do
-      runner.execute(:cd, ['/'], nil)
-      expect(fs.pwd.path_to).to eq('/')
+      exec('cd /')
+      mock_stdout('pwd', '/')
     end
 
     it 'works with relative paths' do
-      expect{runner.execute(:cd, ['usr'], nil)}.to change{fs.pwd.path_to}.from('/').to('/usr')
+      exec('cd usr')
+      mock_stdout('pwd', '/usr')
     end
 
     it 'works with absolute paths' do
-      expect{runner.execute(:cd, ['/usr/bin'], nil)}.to change{fs.pwd.path_to}.from('/').to('/usr/bin')
+      exec('cd /usr/bin')
+      mock_stdout('pwd', '/usr/bin')
     end
 
     it 'does not send stdout' do
-      expect(runner.execute(:cd, ['usr'], nil)).to be_nil
+      expect(STDOUT).not_to receive(:puts)
+      exec('cd usr')
     end
 
     it 'prints a warning message if CDing into a non-existant directory' do
-      expect(runner.execute(:cd, ['fakfljd'], nil)).to eq 'fakfljd does not exist'
+      mock_stdout('cd blah', 'blah does not exist')
     end
 
     it 'does nothing if you use no args' do
-      expect{runner.execute(:cd, [''], nil)}.not_to change{fs.pwd.path_to}
+      exec('cd')
+      mock_stdout('pwd', '/')
     end
 
     it 'works with . and ..' do
-      runner.execute(:cd, ['/usr'], nil)
-      expect(fs.pwd.path_to).to eq('/usr')
-      expect{runner.execute(:cd, ['..'], nil)}.to change{fs.pwd.path_to}.from('/usr').to('/')
-      expect{runner.execute(:cd, ['.'], nil)}.not_to change{fs.pwd.path_to}
+      exec('cd usr')
+      mock_stdout('pwd', '/usr')
+      exec('cd ..')
+      mock_stdout('pwd', '/')
+      exec('cd /usr')
+      exec('cd .')
+      mock_stdout('pwd', '/usr')
     end
   end
 end

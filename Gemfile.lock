@@ -31,3 +31,4 @@ DEPENDENCIES
   highline
   pry
   rspec
+  rspec-mocks
