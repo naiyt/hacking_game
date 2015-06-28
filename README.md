@@ -12,7 +12,6 @@ TODO next:
     - man
 - Files
 - differentiate between files and directories
-- navigate cmd history with arrow keys
 - better handling for "available_commands"
 - cd into multiple directories
 - save state of filesystem

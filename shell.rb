@@ -32,7 +32,7 @@ class Shell
     # TODO: Only works with single quotes so far
 
     # Using readline implemented by: https://github.com/JEG2/highline
-    input = ask(@prompt) { q.readline = true }
+    input = ask(@prompt) { |q| q.readline = true }
 
     @history << input
 
