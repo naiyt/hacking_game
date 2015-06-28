@@ -9,4 +9,4 @@ TODO next:
     - Files
     - differentiate between files and directories
     - command history
-    - cache "path_to"
+    - handle bad paths

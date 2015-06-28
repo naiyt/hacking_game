@@ -78,6 +78,7 @@ module Filesystem
       @parent = parent
       @children = children
       add_default_refs
+      path_to(recache=true)
       Table.instance.table[path_to] = self
     end
 
@@ -98,7 +99,21 @@ module Filesystem
       @children.keys.include? directory
     end
 
-    def path_to
+    def path_to(recache=false)
+      @path = nil if recache
+      @path ||= get_path_to
+      Table.instance.table[@path] = self
+      @path
+    end
+
+    private
+
+    def add_default_refs
+      @children['.'] = self
+      @children['..'] = @parent unless @parent.nil?
+    end
+
+    def get_path_to
       dirs = [@name]
       curr = self
       until curr.parent.nil?
@@ -107,13 +122,6 @@ module Filesystem
       end
       dirs = dirs.reverse[1..-1] # Don't include "root"
       '/' + dirs.join('/')
-    end
-
-    private
-
-    def add_default_refs
-      @children['.'] = self
-      @children['..'] = @parent unless @parent.nil?
     end
   end
 
