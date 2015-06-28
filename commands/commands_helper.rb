@@ -52,6 +52,10 @@ module Commands
       @runner.args
     end
 
+    def fs
+      Filesystem::Filesystem.instance
+    end
+
     def run
       raise NotImplemented 'You must implement a Run method in your command'
     end
