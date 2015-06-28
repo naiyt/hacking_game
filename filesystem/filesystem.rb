@@ -44,6 +44,7 @@ module Filesystem
       @name = name
       @parent = parent
       @children = children
+      add_default_refs
     end
 
     def add_child(name)
@@ -72,6 +73,13 @@ module Filesystem
       end
       dirs = dirs.reverse[1..-1] # Don't include "root"
       '/' + dirs.join('/')
+    end
+
+    private
+
+    def add_default_refs
+      @children['.'] = self
+      @children['..'] = @parent unless @parent.nil?
     end
   end
 

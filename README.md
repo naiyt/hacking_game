@@ -5,9 +5,9 @@ TODO next:
     - cd ..
     - current directory
     - commands:
-        - pwd
         - mkdir
         - rmdir
     - Files
     - differentiate between files and directories
     - Handling paths (for ls and cd especially)
+    - command history
