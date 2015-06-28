@@ -53,7 +53,7 @@ class Shell
         puts "Command not found: #{cmd_sym}"
       end
     end
-    puts next_input unless next_input == default_in
+    puts next_input unless (next_input == default_in || next_input.nil?)
   end
 
   def command_available?(cmd)
