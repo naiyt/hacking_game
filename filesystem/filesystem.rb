@@ -62,6 +62,17 @@ module Filesystem
     def has_directory?(directory)
       @children.keys.include? directory
     end
+
+    def path_to
+      dirs = [@name]
+      curr = self
+      until curr.parent.nil?
+        curr = curr.parent
+        dirs << curr.name
+      end
+      dirs = dirs.reverse[1..-1] # Don't include "root"
+      '/' + dirs.join('/')
+    end
   end
 
   class File
