@@ -1,9 +1,13 @@
 module Commands
   class Ls < Command
     def run
-      contents = fs.ls_path path
-      contents.select! { |d| d[0] != '.' } unless all?
-      contents.join delimiter
+      begin
+        contents = fs.ls_path path
+        contents.select! { |d| d[0] != '.' } unless all?
+        contents.join delimiter
+      rescue Filesystem::FileDoesNotExistError
+        "ls #{path}: file or directory does not exist"
+      end
     end
 
     def all?

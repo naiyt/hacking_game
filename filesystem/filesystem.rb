@@ -2,6 +2,12 @@ require 'singleton'
 require 'yaml'
 
 module Filesystem
+  class AlreadyExistsError < StandardError
+  end
+
+  class FileDoesNotExistError < StandardError
+  end
+
   class Table
     include Singleton
     attr_accessor :table
@@ -42,7 +48,9 @@ module Filesystem
     end
 
     def ls_path(path)
-      Table.instance.table[get_abs_path(path)].ls
+      dir_or_file = Table.instance.table[get_abs_path(path)]
+      raise FileDoesNotExistError if dir_or_file.nil?
+      dir_or_file.ls
     end
 
     def mkdir(name, parent=@pwd)
@@ -68,9 +76,6 @@ module Filesystem
     def relative_path?(path)
       !abs_path(path)
     end
-  end
-
-  class AlreadyExistsError < StandardError
   end
 
   class Directory

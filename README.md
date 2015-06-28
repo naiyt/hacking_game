@@ -11,9 +11,10 @@ TODO next:
     - touch
 - Files
 - differentiate between files and directories
-- command history
-- handle bad paths
+- command history (and pressing up to view previous commands)
 - better handling for "available_commands"
 - cd into multiple directories
 - save state of filesystem
 - multiple commands with ; or && (but not chaining stdout/stdin)
+- support for stderr
+- better interpretation of ".." and "." into cd and ls

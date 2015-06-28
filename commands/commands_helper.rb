@@ -57,7 +57,7 @@ module Commands
     end
 
     def run
-      raise NotImplemented 'You must implement a Run method in your command'
+      raise NotImplemented 'You must implement a run method in your command'
     end
   end
 
