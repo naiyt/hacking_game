@@ -1,8 +1,6 @@
 # hacking_game
 
 TODO next:
-    - Support for silence on commands (e.g., cd currently sends to STDOUT, should be silent)
-    - current directory
     - commands:
         - mkdir
         - rmdir
@@ -10,3 +8,6 @@ TODO next:
     - differentiate between files and directories
     - command history
     - handle bad paths
+    - better handling for "available_commands"
+    - cd into multiple directories
+    - save state of filesystem

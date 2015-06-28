@@ -25,9 +25,9 @@ module Filesystem
     def add_all_defaults(directories, current_parent)
       directories.each do |directory|
         if directory.is_a? String
-          current_parent.add_child(directory)
+          mkdir(directory, current_parent)
         elsif directory.is_a? Hash
-          nested_parent = current_parent.add_child(directory.keys[0])
+          nested_parent = mkdir(directory.keys[0], current_parent)
           add_all_defaults(directory.values.flatten, nested_parent)
         end
       end
@@ -43,6 +43,10 @@ module Filesystem
 
     def ls_path(path)
       Table.instance.table[get_abs_path(path)].ls
+    end
+
+    def mkdir(name, parent=@pwd)
+      parent.add_child(name)
     end
 
     private
