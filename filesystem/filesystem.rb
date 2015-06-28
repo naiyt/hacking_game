@@ -57,7 +57,7 @@ module Filesystem
     end
 
     def ls
-      @children.keys.join '  '
+      @children.keys
     end
 
     def has_directory?(directory)
