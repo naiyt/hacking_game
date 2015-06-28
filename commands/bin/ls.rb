@@ -1,11 +1,7 @@
 module Commands
   class Ls < Command
     def run
-      if args.length > 0 && args[0][0] != '-'
-        contents = Filesystem::Filesystem.instance.ls args[0]
-      else
-        contents = Filesystem::Filesystem.instance.pwd.ls
-      end
+      contents = Filesystem::Filesystem.instance.ls_path path
       contents.select! { |d| d[0] != '.' } unless all?
       contents.join delimiter
     end
@@ -16,6 +12,10 @@ module Commands
 
     def delimiter
       '   '
+    end
+
+    def path
+      args.length > 0 && args[0][0] != '-' ? args[0] : ''
     end
   end
 end

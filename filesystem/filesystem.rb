@@ -41,17 +41,28 @@ module Filesystem
       end
     end
 
-    def ls(path)
-      if path[0] == '/'
-        Table.instance.table[path].ls
+    def ls_path(path)
+      Table.instance.table[get_abs_path(path)].ls
+    end
+
+    private
+
+    def get_abs_path(path)
+      if abs_path?(path)
+        path
       else
-        if pwd.path_to == '/'
-          abs_path = "/#{path}"
-        else
-          abs_path = "#{pwd.path_to}/#{path}"
-        end
-        Table.instance.table[abs_path].ls
+        path = pwd.path_to == '/' ? "/#{path}" : [pwd.path_to, path].join('/')
+        path = path[0..-2] if path[-1] == '/' && path.length > 1
+        path
       end
+    end
+
+    def abs_path?(path)
+      path[0] == '/'
+    end
+
+    def relative_path?(path)
+      !abs_path(path)
     end
   end
 
