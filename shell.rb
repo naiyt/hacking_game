@@ -1,5 +1,6 @@
 require_relative 'commands/commands_helper'
 require_relative 'filesystem/filesystem'
+require 'highline/import'
 
 class Shell
   attr_accessor :history
@@ -16,7 +17,6 @@ class Shell
     @runner.shell = self
     begin
       while true
-        print @prompt
         cmds = get_input
         p cmds if @debug
         exec_cmds(cmds)
@@ -31,7 +31,9 @@ class Shell
   def get_input
     # TODO: Only works with single quotes so far
 
-    input = gets.chomp
+    # Using readline implemented by: https://github.com/JEG2/highline
+    input = ask(@prompt) { q.readline = true }
+
     @history << input
 
     # Split commands by pipes
