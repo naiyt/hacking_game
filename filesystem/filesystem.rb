@@ -40,11 +40,9 @@ module Filesystem
     end
 
     def cd(directory)
-      if @pwd.has_directory? directory
-        @pwd = @pwd.children[directory]
-      else
-        puts "#{directory} does not exist"
-      end
+      dir = Table.instance.table[get_abs_path(directory)]
+      raise FileDoesNotExistError if dir.nil?
+      @pwd = dir
     end
 
     def ls_path(path)
@@ -60,17 +58,25 @@ module Filesystem
     private
 
     def get_abs_path(path)
+      # TODO - clean this up a bit
       if abs_path?(path)
-        path
+        return path
+      elsif path == '..' || path == '.'
+        if path == '..'
+          raise FileDoesNotExistError if pwd.parent.nil?
+          return pwd.parent.path_to
+        elsif path == '.'
+          return pwd.path_to
+        end
       else
         path = pwd.path_to == '/' ? "/#{path}" : [pwd.path_to, path].join('/')
         path = path[0..-2] if path[-1] == '/' && path.length > 1
-        path
+        return path
       end
     end
 
     def abs_path?(path)
-      path[0] == '/'
+      path ? path[0] == '/' : false
     end
 
     def relative_path?(path)
