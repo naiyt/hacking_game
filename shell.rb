@@ -10,7 +10,7 @@ class Shell
     @debug = debug
     @runner = Commands::CommandRunner.instance
     @history = []
-    puts "Welcome to a sweet shell! Type help for help"
+    # puts "Welcome to a sweet shell! Type help for help"
   end
 
   def run
