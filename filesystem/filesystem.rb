@@ -54,8 +54,13 @@ module Filesystem
       dir_or_file.ls
     end
 
-    def mkdir(name, parent=@pwd)
-      parent.add_child(name)
+    def mkdir(name, specified_parent=nil)
+      if specified_parent.nil?
+        parent, dir_name = get_parent(name)
+        parent.add_child(dir_name)
+      else
+        specified_parent.add_child(name)
+      end
     end
 
     def rmdir(name, parent=@pwd)
@@ -67,6 +72,13 @@ module Filesystem
     end
 
     private
+
+    def get_parent(path)
+      path = path.split("/")
+      dir_name = path[-1]
+      path = path[0..-2].join("/")
+      [Table.instance.table[get_abs_path(path)], dir_name]
+    end
 
     def get_abs_path(path)
       # TODO - clean this up a bit

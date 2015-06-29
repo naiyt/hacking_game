@@ -1,10 +1,12 @@
 require 'spec_helper'
 
 describe 'commands' do
-  let!(:shell) { Shell.new }
+  before do
+    @shell = Shell.new
+  end
 
   def exec(cmd)
-    shell.exec_cmds(shell.format_input(cmd))
+    @shell.exec_cmds(@shell.format_input(cmd))
   end
 
   def mock_stdout(cmd, output)
@@ -117,12 +119,22 @@ describe 'commands' do
       exec('mkdir newdir')
       mock_stdout('ls', 'tmp   usr   etc   home   newdir')
     end
+
+    it 'works with absolute paths' do
+      exec('mkdir /usr/bin/coolface')
+      mock_stdout('ls usr/bin', 'coolface')
+    end
+
+    it 'works with relative paths' do
+      exec('mkdir /tmp/tempdir')
+      mock_stdout('ls tmp', 'tempdir')
+    end
   end
 
   describe 'rmdir' do
     it 'will delete a directory if it is empty' do
-      exec('rmdir tmp')
-      mock_stdout('ls', 'usr   etc   home   newdir')
+      exec('rmdir home')
+      mock_stdout('ls', 'tmp   usr   etc   newdir')
     end
 
     it 'will not delete a directory if it is not empty' do

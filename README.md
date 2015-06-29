@@ -5,9 +5,7 @@ A super basic shell and filesystem emulation currently. All commands are shell b
 Commands all support basic piping of stdout/stdin to other commands with |. (e.g., `time | grep 19`.)
 
 TODO next:
-- tests
 - commands:
-    - rmdir
     - rm
     - touch
     - man
