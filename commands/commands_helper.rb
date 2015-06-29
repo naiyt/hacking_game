@@ -62,5 +62,5 @@ module Commands
     end
   end
 
-  Dir['commands/bin/*.rb'].each { |file| require File.expand_path file }
+  Dir['commands/lib/*.rb'].each { |file| require File.expand_path file }
 end
