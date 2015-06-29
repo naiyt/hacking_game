@@ -21,3 +21,5 @@ TODO next:
 - better interpretation of ".." and "." into cd and ls
 - better support for renaming commands (e.g., say I don't want to call the manual pages command by its typical name)
 - consider using curses
+- permissions
+- better arg handling

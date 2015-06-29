@@ -118,4 +118,19 @@ describe 'commands' do
       mock_stdout('ls', 'tmp   usr   etc   home   newdir')
     end
   end
+
+  describe 'rmdir' do
+    it 'will delete a directory if it is empty' do
+      exec('rmdir tmp')
+      mock_stdout('ls', 'usr   etc   home   newdir')
+    end
+
+    it 'will not delete a directory if it is not empty' do
+      mock_stdout('rmdir usr', 'rmdir: usr is not empty')
+    end
+
+    it 'will print a message if the directory does not exist' do
+      mock_stdout('rmdir blah', 'rmdir: blah does not exist')
+    end
+  end
 end

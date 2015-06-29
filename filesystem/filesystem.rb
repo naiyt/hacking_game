@@ -8,6 +8,9 @@ module Filesystem
   class FileDoesNotExistError < StandardError
   end
 
+  class DirectoryNotEmptyError < StandardError
+  end
+
   class Table
     include Singleton
     attr_accessor :table
@@ -53,6 +56,14 @@ module Filesystem
 
     def mkdir(name, parent=@pwd)
       parent.add_child(name)
+    end
+
+    def rmdir(name, parent=@pwd)
+      dir = Table.instance.table[get_abs_path(name)]
+      raise FileDoesNotExistError if dir.nil?
+      raise DirectoryNotEmptyError if dir.has_children?
+      parent.children.delete dir.name
+      Table.instance.table.delete dir.path_to
     end
 
     private
@@ -119,6 +130,10 @@ module Filesystem
       @path ||= get_path_to
       Table.instance.table[@path] = self
       @path
+    end
+
+    def has_children?
+      @children.length > 2 # Don't count . and ..
     end
 
     private
