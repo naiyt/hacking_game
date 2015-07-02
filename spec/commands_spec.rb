@@ -129,12 +129,17 @@ describe 'commands' do
       exec('mkdir /tmp/tempdir')
       mock_stdout('ls tmp', 'tempdir')
     end
+
+    it 'prints an error message if you try to make a subdir of a file' do
+      exec('touch coolfile')
+      mock_stdout('mkdir coolfile/foo', 'coolfile is a file')
+    end
   end
 
   describe 'rmdir' do
     it 'will delete a directory if it is empty' do
       exec('rmdir home')
-      mock_stdout('ls', 'tmp   usr   etc   newdir')
+      mock_stdout('ls', 'tmp   usr   etc   newdir   coolfile')
     end
 
     it 'will not delete a directory if it is not empty' do
@@ -143,6 +148,27 @@ describe 'commands' do
 
     it 'will print a message if the directory does not exist' do
       mock_stdout('rmdir blah', 'rmdir: blah does not exist')
+    end
+  end
+
+  describe 'touch' do
+    it 'will create an empty file if the file does not exist' do
+      exec('touch blah')
+      mock_stdout('ls', 'tmp   usr   etc   newdir   coolfile   blah')
+    end
+
+    it 'will update the timestamp if the file or dir does exist' do
+      pending 'Implement timestamps'
+      this_should_not_get_executed
+    end
+
+    it 'will print a warning message if the path is invalid' do
+      mock_stdout('touch /bad/paths/are/bad', 'path does not exist')
+    end
+
+    it 'will print a warning message if trying to add a child of a file' do
+      exec('touch fds')
+      mock_stdout('touch fds/blah', 'fds is a file')
     end
   end
 end

@@ -7,10 +7,8 @@ Commands all support basic piping of stdout/stdin to other commands with |. (e.g
 TODO next:
 - commands:
     - rm
-    - touch
     - man
-- Files
-- differentiate between files and directories
+    - file
 - better handling for "available_commands"
 - cd into multiple directories
 - save state of filesystem

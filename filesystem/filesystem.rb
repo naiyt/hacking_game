@@ -11,6 +11,15 @@ module Filesystem
   class DirectoryNotEmptyError < StandardError
   end
 
+  class FileAlreadyExists < StandardError
+  end
+
+  class PathDoesNotExist < StandardError
+  end
+
+  class FileNotDir < StandardError
+  end
+
   class Table
     include Singleton
     attr_accessor :table
@@ -57,9 +66,9 @@ module Filesystem
     def mkdir(name, specified_parent=nil)
       if specified_parent.nil?
         parent, dir_name = get_parent(name)
-        parent.add_child(dir_name)
+        parent.add_child(dir_name, Directory)
       else
-        specified_parent.add_child(name)
+        specified_parent.add_child(name, Directory)
       end
     end
 
@@ -71,13 +80,25 @@ module Filesystem
       Table.instance.table.delete dir.path_to
     end
 
+    def create_file(path, data=nil)
+      raise FileAlreadyExists if something_here? path
+      parent, file_name = get_parent(path)
+      parent.add_child(file_name, File)
+    end
+
     private
+
+    def something_here?(path)
+      Table.instance.table.has_key? get_abs_path(path)
+    end
 
     def get_parent(path)
       path = path.split("/")
       dir_name = path[-1]
       path = path[0..-2].join("/")
-      [Table.instance.table[get_abs_path(path)], dir_name]
+      parent = Table.instance.table[get_abs_path(path)]
+      raise PathDoesNotExist if parent.nil?
+      [parent, dir_name]
     end
 
     def get_abs_path(path)
@@ -107,52 +128,12 @@ module Filesystem
     end
   end
 
-  class Directory
-    attr_accessor :name
-    attr_reader :parent, :children
-
-    def initialize(name, parent=nil, children={})
-      @name = name
-      @parent = parent
-      @children = children
-      add_default_refs
-      path_to(recache=true)
-      Table.instance.table[path_to] = self
-    end
-
-    def add_child(name)
-      if @children.has_key?(name)
-        raise AlreadyExistsError, "A file or directory called #{name} already exists"
-      else
-        child = Directory.new(name, self)
-        @children[child.name] = child
-      end
-    end
-
-    def ls
-      @children.keys
-    end
-
-    def has_directory?(directory)
-      @children.keys.include? directory
-    end
-
+  module FileDirHelpers
     def path_to(recache=false)
       @path = nil if recache
       @path ||= get_path_to
       Table.instance.table[@path] = self
       @path
-    end
-
-    def has_children?
-      @children.length > 2 # Don't count . and ..
-    end
-
-    private
-
-    def add_default_refs
-      @children['.'] = self
-      @children['..'] = @parent unless @parent.nil?
     end
 
     def get_path_to
@@ -167,6 +148,64 @@ module Filesystem
     end
   end
 
+  class Directory
+    include FileDirHelpers
+
+    attr_accessor :name
+    attr_reader :parent, :children
+
+    def initialize(name, parent=nil, children={})
+      @name = name
+      @parent = parent
+      @children = children
+      add_default_refs
+      path_to(recache=true)
+      Table.instance.table[path_to] = self
+    end
+
+    def add_child(name, klass)
+      if @children.has_key?(name)
+        raise AlreadyExistsError, "A file or directory called #{name} already exists"
+      else
+        @children[name] = klass.new(name, self)
+      end
+    end
+
+    def ls
+      @children.keys
+    end
+
+    def has_directory?(directory)
+      @children.keys.include? directory
+    end
+
+    def has_children?
+      @children.length > 2 # Don't count . and ..
+    end
+
+    private
+
+    def add_default_refs
+      @children['.'] = self
+      @children['..'] = @parent unless @parent.nil?
+    end
+  end
+
   class File
+    include FileDirHelpers
+
+    attr_accessor :name
+    attr_reader :parent
+
+    def initialize(name, parent, data=nil)
+      @name = name
+      @parent = parent
+      @data = data
+      path_to(recache=true)
+    end
+
+    def add_child(*args)
+      raise FileNotDir, "#{@name} is a file"
+    end
   end
 end
