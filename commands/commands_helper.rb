@@ -2,7 +2,7 @@ require 'pry'
 require 'singleton'
 
 module Commands
-  AVAILABLE_COMMANDS = [:exit, :ls, :cd, :help, :time, :echo, :grep, :pwd, :mkdir, :history, :rmdir, :touch]
+  AVAILABLE_COMMANDS = [:exit, :ls, :cd, :help, :time, :echo, :grep, :pwd, :mkdir, :history, :rmdir, :touch, :filetype]
   STDOUT = :stdout
   STDIN = :stdin
 

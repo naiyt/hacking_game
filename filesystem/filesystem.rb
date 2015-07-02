@@ -86,6 +86,12 @@ module Filesystem
       parent.add_child(file_name, File)
     end
 
+    def file_type(path)
+      file = Table.instance.table[get_abs_path(path)]
+      raise FileDoesNotExistError if file.nil?
+      file.class
+    end
+
     private
 
     def something_here?(path)

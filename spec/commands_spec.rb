@@ -171,4 +171,11 @@ describe 'commands' do
       mock_stdout('touch fds/blah', 'fds is a file')
     end
   end
+
+  describe 'filetype' do
+    it 'will return the correct filetype' do
+      mock_stdout('filetype etc', 'Directory')
+      mock_stdout('filetype blah', 'File')
+    end
+  end
 end
