@@ -13,31 +13,25 @@ class Shell
     # puts "Welcome to a sweet shell! Type help for help"
   end
 
-  def run
+  def run(forever=true)
     @runner.shell = self
     begin
-      while true
-        cmds = get_input
-        p cmds if @debug
-        result = exec_cmds(cmds)
-        yield result, cmds if block_given?
-        puts result unless (result == default_in || result.nil?)
+      if forever
+        inner_run_loop while true
+      else
+        res, cmds = inner_run_loop
+        yield res, cmds if block_given?
       end
     rescue SystemExit, Interrupt
       abort
     end
   end
 
-  def scripting_run
-    @runner.shell = self
-    begin
-      cmds = get_input
-      result = exec_cmds(cmds)
-      yield result, cmds
-      puts result unless (result == default_in || result.nil?)
-    rescue SystemExit, Interrupt
-      abort
-    end
+  def inner_run_loop
+    cmds = get_input
+    res = exec_cmds(cmds)
+    puts res unless (res == default_in || res.nil?)
+    [res, cmds]
   end
 
   def get_input
