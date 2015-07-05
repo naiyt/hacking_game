@@ -32,13 +32,25 @@ module Scripts
 
     def expect_cmd(cmd, txt=nil)
       output(txt)
-      next_cmds until latest_is? cmd
+      next_cmds until latest_cmd?(cmd)
       yield
     end
 
-    def latest_is?(cmd)
+    def expect_cmd_with_args(cmd, args, txt=nil)
+      output(txt)
+      next_cmds until (latest_cmd?(cmd) && latest_args?(args))
+      yield
+    end
+
+    def latest_cmd?(cmd)
       unless @latest_cmds.nil?
         @latest_cmds.map { |c| c[:cmd] }.include? cmd.to_sym
+      end
+    end
+
+    def latest_args?(args)
+      unless @latest_cmds.nil?
+        args == @latest_cmds.map { |c| c[:args].map { |a| a.to_sym} }.flatten
       end
     end
 

@@ -17,6 +17,10 @@ module Scripts
           output 'Nice job! We call them "Directories" not folders, FYI'
         end
 
+        expect_cmd_with_args :man, [:man], 'manual pages can be used with the "man" command. Read the manual page for the man command' do
+          output 'Nice job, man'
+        end
+
         run_playground 'This level is over, but you can keeping playing with the commands you have learned'
       end
     end
