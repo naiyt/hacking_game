@@ -66,5 +66,9 @@ module Scripts
     def greeting
       output("Welcome to #{@name}!", :info)
     end
+
+    def available_commands(cmds)
+      Commands.available_commands = cmds
+    end
   end
 end

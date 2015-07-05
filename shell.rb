@@ -7,7 +7,7 @@ class Shell
 
   attr_accessor :history
 
-  def initialize(debug=false, prompt="[cmd]: ")
+  def initialize(debug=false, prompt="[a13@haksh]: ")
     @prompt = prompt
     @debug = debug
     @runner = Commands::CommandRunner.instance
@@ -84,7 +84,7 @@ class Shell
   end
 
   def self.command_available?(cmd)
-    Commands::AVAILABLE_COMMANDS.include? cmd.to_sym
+    Commands.available_commands.include? cmd.to_sym
   end
 
   def default_in

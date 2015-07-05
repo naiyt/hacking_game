@@ -4,6 +4,8 @@ module Scripts
       Script.new do
         level_name 'Tutorial'
 
+        available_commands [:help, :pwd, :ls, :man, :exit]
+
         output "HAKSH welcomes you. You will be guided through the basics of this system.", :info
 
         expect_cmd :help, "'help' will show you a list of commands. As you prove your skills more commands will be made available." do

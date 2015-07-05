@@ -7,6 +7,14 @@ module Commands
   STDOUT = :stdout
   STDIN = :stdin
 
+  def self.available_commands
+    @available_commands || AVAILABLE_COMMANDS
+  end
+
+  def self.available_commands=(commands=available_commands)
+    @available_commands ||= commands
+  end
+
   module OutputHelper
     def info(txt)
       txt.colorize :green
