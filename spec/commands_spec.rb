@@ -178,4 +178,18 @@ describe 'commands' do
       mock_stdout('filetype blah', 'File')
     end
   end
+
+  describe 'man' do
+    it 'will return the manual as defined by the class' do
+      mock_stdout('man man', Commands::Man.manual)
+    end
+
+    it 'will return an error if the command does not exist' do
+      mock_stdout('man dfdsfds', 'Command not found: dfdsfds')
+    end
+
+    it 'will return an error if the command has no manual' do
+      mock_stdout('man ls', 'ls: no manual found')
+    end
+  end
 end

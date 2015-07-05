@@ -7,7 +7,6 @@ Commands all support basic piping of stdout/stdin to other commands with |. (e.g
 TODO next:
 - commands:
     - rm
-    - man
     - file
 - better handling for "available_commands"
 - cd into multiple directories
@@ -19,3 +18,4 @@ TODO next:
 - consider using curses
 - permissions
 - better arg handling
+- refresh fs state after each spec (too much pollution at the moment)
