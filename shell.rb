@@ -3,6 +3,8 @@ require_relative 'filesystem/filesystem'
 require 'highline/import'
 
 class Shell
+  include Commands::OutputHelper
+
   attr_accessor :history
 
   def initialize(debug=false, prompt="[cmd]: ")
@@ -30,8 +32,21 @@ class Shell
   def inner_run_loop
     cmds = get_input
     res = exec_cmds(cmds)
-    puts res unless (res == default_in || res.nil?)
+    output res unless (res == default_in || res.nil?)
     [res, cmds]
+  end
+
+  def output(res)
+    if res.is_a? Hash
+      if res.has_key? :stderr
+        puts error res[:stderr]
+      end
+      if res.has_key? :stdout
+        puts standard res[:stdout]
+      end
+    elsif res.is_a? String
+      puts standard res
+    end
   end
 
   def get_input
@@ -67,7 +82,7 @@ class Shell
       if self.class.command_available?(cmd_sym)
         next_input = @runner.execute(cmd_sym, cmd_args, next_input)
       else
-        puts "Command not found: #{cmd_sym}"
+        return {:stderr => "Command not found: #{cmd_sym}" }
       end
     end
     next_input
