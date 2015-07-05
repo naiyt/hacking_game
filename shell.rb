@@ -12,7 +12,6 @@ class Shell
     @debug = debug
     @runner = Commands::CommandRunner.instance
     @history = []
-    # puts "Welcome to a sweet shell! Type help for help"
   end
 
   def run(forever=true)
@@ -38,12 +37,8 @@ class Shell
 
   def output(res)
     if res.is_a? Hash
-      if res.has_key? :stderr
-        puts error res[:stderr]
-      end
-      if res.has_key? :stdout
-        puts standard res[:stdout]
-      end
+      puts error(res[:stderr]) if res.has_key? :stderr
+      puts standard(res[:stdout]) if res.has_key? :stdout
     elsif res.is_a? String
       puts standard res
     end

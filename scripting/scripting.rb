@@ -17,7 +17,7 @@ module Scripts
     end
 
     def level_name(n)
-      @name = name
+      @name = n
     end
 
     def next_cmds
@@ -61,6 +61,10 @@ module Scripts
     def run_playground(txt=nil)
       output(txt, :info)
       @shell.run(forever=true)
+    end
+
+    def greeting
+      output("Welcome to #{@name}!", :info)
     end
   end
 end

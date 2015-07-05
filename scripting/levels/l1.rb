@@ -3,7 +3,7 @@ module Scripts
     def self.play
       Script.new do
         level_name 'Level 1'
-        output 'Welcome to a sweet thing!'
+        greeting
 
         expect_cmd :help, 'Type in "help" to get a list of commands' do
           output 'Success! You are 1337 haxor', :info
