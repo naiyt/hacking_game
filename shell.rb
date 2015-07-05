@@ -19,8 +19,22 @@ class Shell
       while true
         cmds = get_input
         p cmds if @debug
-        exec_cmds(cmds)
+        result = exec_cmds(cmds)
+        yield result, cmds if block_given?
+        puts result unless (result == default_in || result.nil?)
       end
+    rescue SystemExit, Interrupt
+      abort
+    end
+  end
+
+  def scripting_run
+    @runner.shell = self
+    begin
+      cmds = get_input
+      result = exec_cmds(cmds)
+      yield result, cmds
+      puts result unless (result == default_in || result.nil?)
     rescue SystemExit, Interrupt
       abort
     end
@@ -62,7 +76,7 @@ class Shell
         puts "Command not found: #{cmd_sym}"
       end
     end
-    puts next_input unless (next_input == default_in || next_input.nil?)
+    next_input
   end
 
   def command_available?(cmd)
