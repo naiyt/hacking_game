@@ -7,6 +7,7 @@ module Scripts
   end
 
   class Script
+    include Commands::OutputHelper
     attr_accessor :shell, :name
 
     def initialize(&block)
@@ -26,18 +27,21 @@ module Scripts
       end
     end
 
-    def output(text)
-      puts text unless text.nil?
+    def output(text, type=:standard)
+      unless text.nil?
+        # sends to the Commands::OutputHelper methods
+        puts self.send(type, text)
+      end
     end
 
     def expect_cmd(cmd, txt=nil)
-      output(txt)
+      output(txt, :info)
       next_cmds until latest_cmd?(cmd)
       yield
     end
 
     def expect_cmd_with_args(cmd, args, txt=nil)
-      output(txt)
+      output(txt, :info)
       next_cmds until (latest_cmd?(cmd) && latest_args?(args))
       yield
     end
@@ -55,7 +59,7 @@ module Scripts
     end
 
     def run_playground(txt=nil)
-      output(txt)
+      output(txt, :info)
       @shell.run(forever=true)
     end
   end
