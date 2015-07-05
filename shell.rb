@@ -64,7 +64,7 @@ class Shell
     next_input = default_in
     cmds.each do |cmd|
       cmd_sym, cmd_args = cmd[:cmd], cmd[:args]
-      if command_available?(cmd_sym)
+      if self.class.command_available?(cmd_sym)
         next_input = @runner.execute(cmd_sym, cmd_args, next_input)
       else
         puts "Command not found: #{cmd_sym}"
@@ -73,8 +73,8 @@ class Shell
     next_input
   end
 
-  def command_available?(cmd)
-    Commands::AVAILABLE_COMMANDS.include? cmd
+  def self.command_available?(cmd)
+    Commands::AVAILABLE_COMMANDS.include? cmd.to_sym
   end
 
   def default_in
