@@ -5,7 +5,7 @@ module Commands
         fs.mkdir args[0]
         nil
       rescue Filesystem::FileNotDir => message
-        message.to_s
+        {stderr: message.to_s}
       end
     end
   end

@@ -13,13 +13,13 @@ module Commands
       if cmd.nil?
         self.class.usage
       elsif !Shell.command_available? cmd
-        "Command not found: #{cmd}"
+        {stderr: "Command not found: #{cmd}"}
       else
         klass = @runner.klass args[0]
         begin
           klass.manual
         rescue NoMethodError
-          "#{cmd}: no manual found"
+          {stderr: "#{cmd}: no manual found"}
         end
       end
     end

@@ -6,7 +6,7 @@ module Commands
         contents.select! { |d| d[0] != '.' } unless all?
         contents.join delimiter
       rescue Filesystem::FileDoesNotExistError
-        "ls #{path}: file or directory does not exist"
+        {stderr: "ls #{path}: file or directory does not exist"}
       end
     end
 
