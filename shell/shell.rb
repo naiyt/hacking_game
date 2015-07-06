@@ -1,5 +1,5 @@
-require_relative 'commands/commands_helper'
-require_relative 'filesystem/filesystem'
+require_relative '../commands/commands_helper'
+require_relative '../filesystem/filesystem'
 require 'highline/import'
 
 class Shell

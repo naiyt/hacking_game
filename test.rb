@@ -1,4 +1,4 @@
-require_relative 'shell'
+require_relative 'shell/shell'
 
 debug = false
 

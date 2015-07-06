@@ -1,5 +1,5 @@
 module Scripts
-  require_relative '../shell.rb'
+  require_relative '../shell/shell.rb'
   Dir['scripting/levels/*.rb'].each { |file| require File.expand_path file }
 
   def self.shell
