@@ -1,3 +1,4 @@
 require_relative 'scripting/scripting'
 
-Scripts::Level1.play
+Scripts.play_game
+# Scripts::Level2.play

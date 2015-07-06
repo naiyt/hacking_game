@@ -24,7 +24,7 @@ module Scripts
           output 'Some commands may be missing a manual page.', :info
         end
 
-        run_playground 'This level is now over. You may now use the commands you have learned thus far freely.'
+        output 'You have completed level 1.', :info
       end
     end
   end

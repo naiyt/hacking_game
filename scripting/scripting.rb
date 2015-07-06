@@ -33,6 +33,7 @@ module Scripts
     end
 
     def expect_cmd_with_args(cmd, args, txt=nil)
+      args = [args] unless args.is_a? Array
       output(txt, :info)
       next_cmds until (latest_cmd?(cmd) && latest_args?(args))
       yield
