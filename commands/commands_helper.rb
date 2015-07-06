@@ -1,6 +1,6 @@
 require 'pry'
 require 'singleton'
-require 'colorize'
+require_relative 'output_helper'
 
 module Commands
   AVAILABLE_COMMANDS = [:exit, :ls, :cd, :help, :time, :echo, :grep, :pwd, :mkdir, :history, :rmdir, :touch, :filetype, :man]
@@ -12,21 +12,7 @@ module Commands
   end
 
   def self.available_commands=(commands=available_commands)
-    @available_commands ||= commands
-  end
-
-  module OutputHelper
-    def info(txt)
-      txt.colorize :green
-    end
-
-    def error(txt)
-      txt.colorize :red
-    end
-
-    def standard(txt)
-      txt
-    end
+    @available_commands = commands
   end
 
   class CommandRunner
