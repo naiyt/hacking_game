@@ -15,7 +15,7 @@ module Commands
       elsif !Shell.command_available? cmd
         {stderr: "Command not found: #{cmd}"}
       else
-        klass = @runner.klass args[0]
+        klass = @runner.get_class args[0]
         begin
           klass.manual
         rescue NoMethodError
