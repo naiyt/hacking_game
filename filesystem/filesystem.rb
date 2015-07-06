@@ -34,9 +34,14 @@ module Filesystem
     attr_reader :pwd
 
     def initialize
+      reinit
+    end
+
+    def reinit
       default_fs = YAML.load_file './filesystem/default_fs.yaml'
       @root = Directory.new('root')
       @pwd = @root
+      Table.instance.table = {}
       add_all_defaults(default_fs['root'], @root)
     end
 

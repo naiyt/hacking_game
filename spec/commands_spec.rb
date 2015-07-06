@@ -1,12 +1,14 @@
 require 'spec_helper'
 
 describe 'commands' do
-  before do
-    @shell = Shell.new
+  let(:shell) { Shell.new }
+
+  after do
+    Filesystem::Filesystem.instance.reinit
   end
 
   def exec(cmd)
-    @shell.exec_cmds(@shell.format_input(cmd))
+    shell.exec_cmds(shell.format_input(cmd))
   end
 
   def mock_stdout(cmd, output)
@@ -15,7 +17,7 @@ describe 'commands' do
     else
       expect(STDOUT).to receive(:puts).with(output)
     end
-    @shell.output(exec(cmd))
+    shell.output(exec(cmd))
   end
 
   describe 'cd and pwd' do
@@ -139,7 +141,7 @@ describe 'commands' do
   describe 'rmdir' do
     it 'will delete a directory if it is empty' do
       exec('rmdir home')
-      mock_stdout('ls', 'tmp   usr   etc   newdir   coolfile')
+      mock_stdout('ls', 'tmp   usr   etc')
     end
 
     it 'will not delete a directory if it is not empty' do
@@ -154,7 +156,7 @@ describe 'commands' do
   describe 'touch' do
     it 'will create an empty file if the file does not exist' do
       exec('touch blah')
-      mock_stdout('ls', 'tmp   usr   etc   newdir   coolfile   blah')
+      mock_stdout('ls', 'tmp   usr   etc   home   blah')
     end
 
     it 'will update the timestamp if the file or dir does exist' do
@@ -175,6 +177,7 @@ describe 'commands' do
   describe 'filetype' do
     it 'will return the correct filetype' do
       mock_stdout('filetype etc', 'Directory')
+      exec('touch blah')
       mock_stdout('filetype blah', 'File')
     end
   end
