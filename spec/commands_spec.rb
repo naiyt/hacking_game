@@ -15,7 +15,7 @@ describe 'commands' do
     else
       expect(STDOUT).to receive(:puts).with(output)
     end
-    exec(cmd)
+    @shell.output(exec(cmd))
   end
 
   describe 'cd and pwd' do
