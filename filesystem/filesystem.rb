@@ -8,6 +8,10 @@ module Filesystem
     attr_accessor :table
 
     def initialize
+      reinit
+    end
+
+    def reinit
       @table = {}
     end
   end
@@ -24,7 +28,7 @@ module Filesystem
       default_fs = YAML.load_file './filesystem/default_fs.yaml'
       @root = Directory.new('root')
       @pwd = @root
-      Table.instance.table = {}
+      Table.instance.reinit
       add_all_defaults(default_fs['root'], @root)
     end
 
