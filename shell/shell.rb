@@ -7,6 +7,10 @@ class Shell
 
   attr_accessor :history
 
+  def self.command_available?(cmd)
+    Commands.available_commands.include? cmd.to_sym
+  end
+
   def initialize(debug=false, prompt="[a13@haksh]: ")
     @prompt = prompt
     @debug = debug
@@ -45,8 +49,6 @@ class Shell
   end
 
   def get_input
-    # TODO: Only works with single quotes so far
-
     # Using readline implemented by: https://github.com/JEG2/highline
     input = ask(@prompt) { |q| q.readline = true }
     @history << input
@@ -61,6 +63,7 @@ class Shell
     input = input.map { |x| x.strip }
 
     # Split by words or "quoted words"
+    # TODO: only works with double quotes
     input = input.map { |x| x.split(/\s(?=(?:[^"]|"[^"]*")*$)/) } # http://stackoverflow.com/a/11566264/1026980
 
     # Remove quotes
@@ -71,21 +74,19 @@ class Shell
   end
 
   def exec_cmds(cmds)
-    next_input = default_in
+    pipe = default_in
     cmds.each do |cmd|
       cmd_sym, cmd_args = cmd[:cmd], cmd[:args]
       if self.class.command_available?(cmd_sym)
-        next_input = @runner.execute(cmd_sym, cmd_args, next_input)
+        pipe = @runner.execute(cmd_sym, cmd_args, pipe)
       else
         return {:stderr => "Command not found: #{cmd_sym}" }
       end
     end
-    next_input
+    pipe
   end
 
-  def self.command_available?(cmd)
-    Commands.available_commands.include? cmd.to_sym
-  end
+  private
 
   def default_in
     Commands::STDIN
