@@ -8,7 +8,7 @@ module Scripts
 
         output "You will now learn about navigating the filesystem.", :info
 
-        output "We have given you access to more commands. Use the history command if you want to see them.", :info
+        output "We have given you access to more commands. Use the help command if you want to see them.", :info
 
         expect_cmd :ls, "Remember that you can list the files in your current directory with 'ls'. Do so now." do
           output "Good. Currently there are only directories.", :info
