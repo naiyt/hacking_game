@@ -28,14 +28,14 @@ module Scripts
 
     def expect_cmd(cmd, txt=nil)
       output(txt, :info)
-      next_cmds until latest_cmd?(cmd)
+      next_cmds until is_latest_cmd?(cmd)
       yield
     end
 
     def expect_cmd_with_args(cmd, args, txt=nil)
-      args = [args] unless args.is_a? Array
+      args = Array(args)
       output(txt, :info)
-      next_cmds until (latest_cmd?(cmd) && latest_args?(args))
+      next_cmds until (is_latest_cmd?(cmd) && latest_args?(args))
       yield
     end
 
@@ -61,9 +61,10 @@ module Scripts
       end
     end
 
-    def latest_cmd?(cmd)
+    def is_latest_cmd?(cmd)
       unless @latest_cmds.nil?
-        @latest_cmds.map { |c| c[:cmd] }.include? cmd.to_sym
+        cmds = @latest_cmds.map { |c| c[:cmd] }
+        cmds.include? cmd.to_sym
       end
     end
 
