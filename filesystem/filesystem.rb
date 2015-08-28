@@ -1,30 +1,17 @@
 require 'singleton'
 require 'yaml'
+require_relative 'exceptions'
 
 module Filesystem
-  class AlreadyExistsError < StandardError
-  end
-
-  class FileDoesNotExistError < StandardError
-  end
-
-  class DirectoryNotEmptyError < StandardError
-  end
-
-  class FileAlreadyExists < StandardError
-  end
-
-  class PathDoesNotExist < StandardError
-  end
-
-  class FileNotDir < StandardError
-  end
-
   class Table
     include Singleton
     attr_accessor :table
 
     def initialize
+      reinit
+    end
+
+    def reinit
       @table = {}
     end
   end
@@ -34,9 +21,14 @@ module Filesystem
     attr_reader :pwd
 
     def initialize
+      reinit
+    end
+
+    def reinit
       default_fs = YAML.load_file './filesystem/default_fs.yaml'
       @root = Directory.new('root')
       @pwd = @root
+      Table.instance.reinit
       add_all_defaults(default_fs['root'], @root)
     end
 

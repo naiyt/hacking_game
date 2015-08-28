@@ -2,10 +2,11 @@ module Commands
   class Cd < Command
     def run
       begin
-        fs.cd args[0]
+        dir = args[0].nil? ? '/' : args[0]
+        fs.cd dir
         nil
       rescue Filesystem::FileDoesNotExistError
-        "#{args[0]} does not exist"
+        {stderr: "#{args[0]} does not exist"}
       end
     end
   end

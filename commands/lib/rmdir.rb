@@ -5,9 +5,9 @@ module Commands
         fs.rmdir args[0]
         nil
       rescue Filesystem::FileDoesNotExistError
-        "rmdir: #{args[0]} does not exist"
+        {stderr: "rmdir: #{args[0]} does not exist"}
       rescue Filesystem::DirectoryNotEmptyError
-        "rmdir: #{args[0]} is not empty"
+        {stderr: "rmdir: #{args[0]} is not empty"}
       end
     end
   end

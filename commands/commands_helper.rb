@@ -1,10 +1,19 @@
 require 'pry'
 require 'singleton'
+require_relative 'output_helper'
 
 module Commands
   AVAILABLE_COMMANDS = [:exit, :ls, :cd, :help, :time, :echo, :grep, :pwd, :mkdir, :history, :rmdir, :touch, :filetype, :man]
   STDOUT = :stdout
   STDIN = :stdin
+
+  def self.available_commands
+    @available_commands || AVAILABLE_COMMANDS
+  end
+
+  def self.available_commands=(commands=available_commands)
+    @available_commands = commands
+  end
 
   class CommandRunner
     include Singleton
@@ -17,14 +26,14 @@ module Commands
     end
 
     def execute(cmd_sym, args, input)
-      @commands[cmd_sym] ||= klass(cmd_sym).new
+      @commands[cmd_sym] ||= get_class(cmd_sym).new
       @input = input
       @args = args
       @commands[cmd_sym].run
     end
 
     # http://stackoverflow.com/a/5924541/1026980
-    def klass(cmd_sym)
+    def get_class(cmd_sym)
       "Commands::#{cmd_sym.capitalize}".split('::').inject(Object) {|o,c| o.const_get c}
     end
   end

@@ -1,28 +1,46 @@
-require_relative 'commands/commands_helper'
-require_relative 'filesystem/filesystem'
+require_relative '../commands/commands_helper'
+require_relative '../filesystem/filesystem'
 require 'highline/import'
 
 class Shell
+  include Commands::OutputHelper
+
   attr_accessor :history
 
-  def initialize(debug=false, prompt="[cmd]: ")
+  def initialize(debug=false, prompt="[a13@haksh]: ")
     @prompt = prompt
     @debug = debug
     @runner = Commands::CommandRunner.instance
     @history = []
-    # puts "Welcome to a sweet shell! Type help for help"
   end
 
-  def run
+  def run(forever=true)
     @runner.shell = self
     begin
-      while true
-        cmds = get_input
-        p cmds if @debug
-        exec_cmds(cmds)
+      if forever
+        inner_run_loop while true
+      else
+        res, cmds = inner_run_loop
+        yield res, cmds if block_given?
       end
     rescue SystemExit, Interrupt
       abort
+    end
+  end
+
+  def inner_run_loop
+    cmds = get_input
+    res = exec_cmds(cmds)
+    output res unless (res == default_in || res.nil?)
+    [res, cmds]
+  end
+
+  def output(res)
+    if res.is_a? Hash
+      puts error(res[:stderr]) if res.has_key? :stderr
+      puts standard(res[:stdout]) if res.has_key? :stdout
+    elsif res.is_a? String
+      puts standard res
     end
   end
 
@@ -59,14 +77,14 @@ class Shell
       if self.class.command_available?(cmd_sym)
         next_input = @runner.execute(cmd_sym, cmd_args, next_input)
       else
-        puts "Command not found: #{cmd_sym}"
+        return {:stderr => "Command not found: #{cmd_sym}" }
       end
     end
-    puts next_input unless (next_input == default_in || next_input.nil?)
+    next_input
   end
 
   def self.command_available?(cmd)
-    Commands::AVAILABLE_COMMANDS.include? cmd.to_sym
+    Commands.available_commands.include? cmd.to_sym
   end
 
   def default_in
