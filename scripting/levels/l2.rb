@@ -40,6 +40,9 @@ module Scripts
         expect_cmd_with_args :cd, :"..", "We can return to the root directory using the '..' shortcut. '..' always refers to your parent directory" do
           output "Good. Once again you can use pwd to confirm that you are in the root directory.", :info
         end
+
+        output "You've completed this basic prototype. Congrats! Now you're free to hack the night away.", :info
+        run_playground
       end
     end
   end

@@ -41,7 +41,7 @@ module Scripts
 
     def run_playground(txt=nil)
       output(txt, :info)
-      @shell.run(forever=true)
+      @shell.run(forever: true)
     end
 
     def greeting
