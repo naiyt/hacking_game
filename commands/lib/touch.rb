@@ -6,7 +6,7 @@ module Commands
         nil
       rescue Filesystem::FileAlreadyExists
         nil
-      rescue Filesystem::PathDoesNotExist
+      rescue Filesystem::FileDoesNotExistError
         {stderr: "path does not exist"}
       rescue Filesystem::FileNotDir => message
         {stderr: message.to_s}

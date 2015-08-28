@@ -32,27 +32,13 @@ module Filesystem
       add_all_defaults(default_fs['root'], @root)
     end
 
-    def add_all_defaults(directories, current_parent)
-      directories.each do |directory|
-        if directory.is_a? String
-          mkdir(directory, current_parent)
-        elsif directory.is_a? Hash
-          nested_parent = mkdir(directory.keys[0], current_parent)
-          add_all_defaults(directory.values.flatten, nested_parent)
-        end
-      end
-    end
-
     def cd(directory)
-      dir = Table.instance.table[get_abs_path(directory)]
-      raise FileDoesNotExistError if dir.nil?
-      @pwd = dir
+      @pwd = get_fs_obj!(directory)
     end
 
     def ls_path(path)
-      dir_or_file = Table.instance.table[get_abs_path(path)]
-      raise FileDoesNotExistError if dir_or_file.nil?
-      dir_or_file.ls
+      fs_obj = get_fs_obj!(path)
+      fs_obj.ls
     end
 
     def mkdir(name, specified_parent=nil)
@@ -64,9 +50,8 @@ module Filesystem
       end
     end
 
-    def rmdir(name, parent=@pwd)
-      dir = Table.instance.table[get_abs_path(name)]
-      raise FileDoesNotExistError if dir.nil?
+    def rmdir(path, parent=@pwd)
+      dir = get_fs_obj!(path)
       raise DirectoryNotEmptyError if dir.has_children?
       parent.children.delete dir.name
       Table.instance.table.delete dir.path_to
@@ -79,12 +64,28 @@ module Filesystem
     end
 
     def file_type(path)
-      file = Table.instance.table[get_abs_path(path)]
-      raise FileDoesNotExistError if file.nil?
-      file.class
+      fs_obj = get_fs_obj!(path)
+      fs_obj.class
     end
 
     private
+
+    def add_all_defaults(directories, current_parent)
+      directories.each do |directory|
+        if directory.is_a? String
+          mkdir(directory, current_parent)
+        elsif directory.is_a? Hash
+          nested_parent = mkdir(directory.keys[0], current_parent)
+          add_all_defaults(directory.values.flatten, nested_parent)
+        end
+      end
+    end
+
+    def get_fs_obj!(path)
+      fs_obj = Table.instance.table[get_abs_path(path)]
+      raise FileDoesNotExistError if fs_obj.nil?
+      fs_obj
+    end
 
     def something_here?(path)
       Table.instance.table.has_key? get_abs_path(path)
@@ -94,13 +95,11 @@ module Filesystem
       path = path.split("/")
       dir_name = path[-1]
       path = path[0..-2].join("/")
-      parent = Table.instance.table[get_abs_path(path)]
-      raise PathDoesNotExist if parent.nil?
+      parent = get_fs_obj!(path)
       [parent, dir_name]
     end
 
     def get_abs_path(path)
-      # TODO - clean this up a bit
       if abs_path?(path)
         return path
       elsif path == '..' || path == '.'
@@ -157,7 +156,7 @@ module Filesystem
       @parent = parent
       @children = children
       add_default_refs
-      path_to(recache=true)
+      path_to(recache: true)
       Table.instance.table[path_to] = self
     end
 
@@ -199,7 +198,7 @@ module Filesystem
       @name = name
       @parent = parent
       @data = data
-      path_to(recache=true)
+      path_to(recache: true)
     end
 
     def add_child(*args)
@@ -207,3 +206,4 @@ module Filesystem
     end
   end
 end
+
