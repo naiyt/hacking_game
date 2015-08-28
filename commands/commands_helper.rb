@@ -1,6 +1,7 @@
 require 'pry'
 require 'singleton'
 require_relative 'output_helper'
+require_relative 'exceptions'
 
 module Commands
   AVAILABLE_COMMANDS = [:exit, :ls, :cd, :help, :time, :echo, :grep, :pwd, :mkdir, :history, :rmdir, :touch, :filetype, :man]
@@ -38,9 +39,6 @@ module Commands
     end
   end
 
-  class NotImplemented < StandardError
-  end
-
   class Command
     def initialize
       @runner = CommandRunner.instance
@@ -51,11 +49,7 @@ module Commands
     end
 
     def get_input
-      if from_stdin?
-        gets
-      else
-        @runner.input
-      end
+      from_stdin? ? gets : @runner.input
     end
 
     def args
@@ -73,3 +67,4 @@ module Commands
 
   Dir['commands/lib/*.rb'].each { |file| require File.expand_path file }
 end
+
