@@ -1,5 +1,14 @@
 module Commands
   class Ls < Command
+    def self.manual
+      <<-EOS
+ls - list the contents of a directory.
+
+stdout: yes
+stdin: no
+      EOS
+    end
+
     def run
       begin
         contents = fs.ls_path path

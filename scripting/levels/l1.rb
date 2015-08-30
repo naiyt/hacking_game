@@ -6,25 +6,19 @@ module Scripts
 
         available_commands [:help, :pwd, :ls, :man, :exit]
 
-        output "HAKSH welcomes you. You will be guided through the basics of this system.", :info
+        output "WELCOME. YOU WILL NOW LEARN THE BASICS OF THIS SYSTEM.", :info
 
-        expect_cmd :help, "'help' will show you a list of commands. As you prove your skills more commands will be made available." do
-          output 'Success. You can use the help command at any time to view your currently available commands.', :info
+        expect_cmd :help, "USE 'help' TO SHOW AVAILABLE COMMANDS." do
+          output 'SUCCESS. PROVE YOUR SKILL TO GAIN MORE COMMANDS.', :info
         end
 
-        expect_cmd :pwd, "'pwd' will tell you where you are in the filesystem." do
-          output 'Success. Use pwd whenever you are unsure of your location', :info
-        end
+        expect_cmd :pwd, "USE 'pwd' TO PRINT YOUR CURRENT LOCATION. YOUR LOCATION IS ALSO SHOWN IN THE PROMPT."
 
-        expect_cmd :ls, "'ls' will list the contents of the current directory" do
-          output 'Success. Contents can be files or directories.', :info
-        end
+        expect_cmd :ls, "'ls' WILL LIST THE CONTENTS OF A DIRECTORY."
 
-        expect_cmd_with_args :man, [:man], "You can learn more about commands with the 'man' command. man is short for manual. Read the manual for the 'man' command." do
-          output 'Some commands may be missing a manual page.', :info
-        end
+        expect_cmd_with_args :man, [:ls], "USE 'man' TO READ THE MANUAL PAGE FOR THE COMMAND 'ls'"
 
-        output 'You have completed level 1.', :info
+        output 'YOU WILL NOW GAIN ACCESS TO MORE COMMANDS.', :info
       end
     end
   end
