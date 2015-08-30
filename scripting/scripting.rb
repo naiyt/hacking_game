@@ -57,8 +57,11 @@ module Scripts
       yield if block_given?
     end
 
-    def expect_file_to_exist(filename, txt=nil)
-      raise
+    def expect_file_to_exist(filepath, txt=nil)
+      expectation(txt) do
+        @fs.file_exists?(filepath)
+      end
+      yield if block_given?
     end
 
     def expect_dir_to_exist(dir_name, txt=nil)

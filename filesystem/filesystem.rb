@@ -68,6 +68,14 @@ module Filesystem
       fs_obj.class
     end
 
+    def file_exists?(path)
+      begin
+        get_fs_obj!(path).class == File
+      rescue FileDoesNotExistError
+        false
+      end
+    end
+
     private
 
     def add_all_defaults(directories, current_parent)
