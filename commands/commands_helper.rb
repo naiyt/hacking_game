@@ -4,16 +4,23 @@ require_relative 'output_helper'
 require_relative 'exceptions'
 
 module Commands
-  AVAILABLE_COMMANDS = [:exit, :ls, :cd, :help, :time, :echo, :grep, :pwd, :mkdir, :history, :rmdir, :touch, :filetype, :man, :task]
   STDOUT = :stdout
   STDIN = :stdin
 
   def self.available_commands
-    @available_commands || AVAILABLE_COMMANDS
+    @available_commands || get_default_commands
   end
 
   def self.available_commands=(commands=available_commands)
     @available_commands = commands
+  end
+
+  def self.get_default_commands
+    commands = Commands.constants.select do |c|
+      constant = Commands.const_get(c)
+      constant.is_a?(Class) && constant < Commands::Command
+    end
+    commands.map(&:downcase)
   end
 
   class CommandRunner

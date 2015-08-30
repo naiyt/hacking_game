@@ -8,7 +8,6 @@ TODO next:
 - commands:
     - rm
     - file
-- better handling for "available_commands"!!!!
 - cd into multiple directories
 - save state of filesystem
 - multiple commands with ; or && (but not chaining stdout/stdin)
