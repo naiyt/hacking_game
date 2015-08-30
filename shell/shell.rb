@@ -7,11 +7,11 @@ class Shell
 
   attr_accessor :history
 
-  def initialize(debug=false, prompt="[a13@haksh]: ")
-    @prompt = prompt
+  def initialize(debug=false)
     @debug = debug
     @runner = Commands::CommandRunner.instance
     @history = []
+    @fs = Filesystem::Filesystem.instance
   end
 
   def run(forever=true)
@@ -48,9 +48,14 @@ class Shell
     # TODO: Only works with single quotes so far
 
     # Using readline implemented by: https://github.com/JEG2/highline
-    input = ask(@prompt) { |q| q.readline = true }
+    input = ask(prompt) { |q| q.readline = true }
     @history << input
     format_input(input)
+  end
+
+  def prompt
+    path = @fs.pwd.path_to
+    "[a13@hacksh #{path}]: "
   end
 
   def format_input(input)
