@@ -12,6 +12,7 @@ module Scripts
 
     def initialize(&block)
       @shell = Scripts.shell
+      @fs = Filesystem::Filesystem.instance
       instance_eval(&block)
     end
 
@@ -37,6 +38,20 @@ module Scripts
       output(txt, :info)
       next_cmds until (latest_cmd?(cmd) && latest_args?(args))
       yield if block_given?
+    end
+
+    def expect_pwd_to_be(dir, txt=nil)
+      output(txt, :info)
+      next_cmds until @fs.pwd.path_to == dir
+      yield if block_given?
+    end
+
+    def expect_file_to_exist(filename, txt=nil)
+      raise
+    end
+
+    def expect_dir_to_exist(dir_name, txt=nil)
+      raise
     end
 
     def run_playground(txt=nil)
