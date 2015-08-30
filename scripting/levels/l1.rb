@@ -4,13 +4,15 @@ module Scripts
       Script.new do
         level_name 'Tutorial'
 
-        available_commands [:help, :pwd, :ls, :man, :exit]
+        available_commands [:help, :pwd, :ls, :man, :exit, :task]
 
         output "WELCOME. YOU WILL NOW LEARN THE BASICS OF THIS SYSTEM.", :info
 
         expect_cmd :help, "USE 'help' TO SHOW AVAILABLE COMMANDS." do
           output 'SUCCESS. PROVE YOUR SKILL TO GAIN MORE COMMANDS.', :info
         end
+
+        output "USE THE COMMAND 'task' IF YOU FORGET YOUR CURRENT GOAL.", :info
 
         expect_cmd :pwd, "USE 'pwd' TO PRINT YOUR CURRENT LOCATION. YOUR LOCATION IS ALSO SHOWN IN THE PROMPT."
 

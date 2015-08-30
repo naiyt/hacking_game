@@ -4,7 +4,7 @@ module Scripts
       Script.new do
         level_name 'Level 2'
 
-        available_commands [:help, :pwd, :ls, :man, :exit, :cd]
+        available_commands [:help, :pwd, :ls, :man, :exit, :cd, :task]
 
         output "COMMAND(S) UNLOCKED: 'cd'", :info
 

@@ -8,7 +8,7 @@ TODO next:
 - commands:
     - rm
     - file
-- better handling for "available_commands"
+- better handling for "available_commands"!!!!
 - cd into multiple directories
 - save state of filesystem
 - multiple commands with ; or && (but not chaining stdout/stdin)
@@ -18,5 +18,3 @@ TODO next:
 - permissions
 - better arg handling
 - refresh fs state after each spec (too much pollution at the moment)
-
-- In scripting, command to print reminder of current task

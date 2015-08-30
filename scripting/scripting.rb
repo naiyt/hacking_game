@@ -27,22 +27,33 @@ module Scripts
       puts self.send(type, text) unless text.nil?
     end
 
-    def expect_cmd(cmd, txt=nil)
+    def expectation(txt)
       output(txt, :info)
-      next_cmds until latest_cmd?(cmd)
+      until yield
+        output("CURRENT TASK: #{txt}", :info) if is_latest_cmd?('task')
+        next_cmds
+      end
+    end
+
+    def expect_cmd(cmd, txt=nil)
+      expectation(txt) do
+        is_latest_cmd?(cmd)
+      end
       yield if block_given?
     end
 
     def expect_cmd_with_args(cmd, args, txt=nil)
-      args = [args] unless args.is_a? Array
-      output(txt, :info)
-      next_cmds until (latest_cmd?(cmd) && latest_args?(args))
+      expectation(txt) do
+        args = [args] unless args.is_a? Array
+        is_latest_cmd?(cmd) && is_latest_args?(args)
+      end
       yield if block_given?
     end
 
     def expect_pwd_to_be(dir, txt=nil)
-      output(txt, :info)
-      next_cmds until @fs.pwd.path_to == dir
+      expectation(txt) do
+        @fs.pwd.path_to == dir
+      end
       yield if block_given?
     end
 
@@ -76,13 +87,13 @@ module Scripts
       end
     end
 
-    def latest_cmd?(cmd)
+    def is_latest_cmd?(cmd)
       unless @latest_cmds.nil?
         @latest_cmds.map { |c| c[:cmd] }.include? cmd.to_sym
       end
     end
 
-    def latest_args?(args)
+    def is_latest_args?(args)
       unless @latest_cmds.nil?
         args == @latest_cmds.map { |c| c[:args].map { |a| a.to_sym} }.flatten
       end
