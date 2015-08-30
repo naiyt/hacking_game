@@ -4,7 +4,7 @@ module Scripts
       Script.new do
         level_name 'Tutorial'
 
-        available_commands [:help, :pwd, :ls, :man, :exit, :task]
+        available_commands [:help, :pwd, :ls, :man, :exit]
 
         output "WELCOME. YOU WILL NOW LEARN THE BASICS OF THIS SYSTEM.", :info
 

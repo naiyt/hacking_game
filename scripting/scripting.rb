@@ -78,6 +78,7 @@ module Scripts
     end
 
     def available_commands(cmds)
+      cmds << :task
       Commands.available_commands = cmds
     end
 
