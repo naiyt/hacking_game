@@ -13,6 +13,14 @@ module Commands
       txt.colorize :red
     end
 
+    def color_dir(txt)
+      txt.colorize :blue
+    end
+
+    def color_file(txt)
+      txt
+    end
+
     def standard(txt)
       txt
     end

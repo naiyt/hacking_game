@@ -47,6 +47,8 @@ module Commands
   end
 
   class Command
+    include Commands::OutputHelper
+
     def initialize
       @runner = CommandRunner.instance
     end
