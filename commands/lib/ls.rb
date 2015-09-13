@@ -16,7 +16,7 @@ stdin: no
         contents = colorize(contents)
         contents.join delimiter
       rescue Filesystem::FileDoesNotExistError
-        {stderr: "ls #{path}: file or directory does not exist"}
+        { stderr: "ls #{path}: file or directory does not exist" }
       end
     end
 

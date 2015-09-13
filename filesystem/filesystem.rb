@@ -25,7 +25,7 @@ module Filesystem
     end
 
     def reinit
-      default_fs = YAML.load_file './filesystem/default_fs.yaml'
+      default_fs = YAML.load_file './filesystem/default_fs.yml'
       @root = Directory.new('root')
       @pwd = @root
       Table.instance.reinit
@@ -74,6 +74,10 @@ module Filesystem
       rescue FileDoesNotExistError
         false
       end
+    end
+
+    def get_file(path)
+      get_fs_obj!(path)
     end
 
     private
@@ -199,7 +203,7 @@ module Filesystem
   class File
     include FileDirHelpers
 
-    attr_accessor :name
+    attr_accessor :name, :data
     attr_reader :parent
 
     def initialize(name, parent, data=nil)

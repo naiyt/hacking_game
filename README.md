@@ -7,11 +7,9 @@ Commands all support basic piping of stdout/stdin to other commands with |. (e.g
 TODO next:
 - commands:
     - rm
-    - file
 - cd into multiple directories
 - save state of filesystem
 - multiple commands with ; or && (but not chaining stdout/stdin)
-- support for stderr
 - better support for renaming commands (e.g., say I don't want to call the manual pages command by its typical name)
 - consider using curses
 - permissions
