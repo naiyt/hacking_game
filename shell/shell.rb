@@ -66,26 +66,65 @@ class Shell
     input = input.map { |x| x.strip }
 
     # Split by words or "quoted words"
-    input = input.map { |x| x.split(/\s(?=(?:[^"]|"[^"]*")*$)/) } # http://stackoverflow.com/a/11566264/1026980
+    # http://stackoverflow.com/a/11566264/1026980
+    input = input.map { |x| x.split(/\s(?=(?:[^"]|"[^"]*")*$)/) }
 
     # Remove quotes
     input = input.map { |x| x.map { |y| y.gsub '"', ''} }
 
-    # Turn into list of hashes: "grep blah | echo"" => [{cmd: 'grep', args:['blah']}, {cmd: 'echo', args: []}]
-    input.map { |x| {cmd: x[0].to_sym, args: x[1..-1]} }
+    # Turn into list of hashes:
+    # e.g.: "grep blah | echo"" => [{cmd: 'grep', args:['blah']}, {cmd: 'echo', args: []}]
+    input = input.map { |x| {cmd: x[0].to_sym, args: x[1..-1]} }
+
+    # Parse for stdout redirection ( > and >> )
+    input = input.map { |x| parse_redirects(x) }
+
+    input
+  end
+
+  def parse_redirects(cmd)
+    overwrite_index = cmd[:args].index ">"
+    append_index = cmd[:args].index ">>"
+    splice_index = !overwrite_index.nil? ? overwrite_index : append_index
+    if splice_index
+      file_name = cmd[:args][splice_index+1]
+      cmd[:args] = cmd[:args][0...splice_index]
+      cmd[:redirect] = { append: !append_index.nil?, file_name: file_name }
+    end
+    cmd
   end
 
   def exec_cmds(cmds)
     next_input = default_in
     cmds.each do |cmd|
-      cmd_sym, cmd_args = cmd[:cmd], cmd[:args]
+      cmd_sym, cmd_args, cmd_redirect = cmd[:cmd], cmd[:args], cmd[:redirect]
       if self.class.command_available?(cmd_sym)
         next_input = @runner.execute(cmd_sym, cmd_args, next_input)
+        next_input = redirect_out(next_input.uncolorize, cmd_redirect) if cmd_redirect
       else
         return {:stderr => "Command not found: #{cmd_sym}" }
       end
     end
     next_input
+  end
+
+  def redirect_out(data, redirect_hash)
+    if @fs.file_exists? redirect_hash[:file_name]
+      file = @fs.get_file(redirect_hash[:file_name])
+    else
+      begin
+        file = @fs.create_file(redirect_hash[:file_name])
+      rescue Filesystem::FileDoesNotExistError
+        return "Error: the path #{redirect_hash[:file_name]} does not exist"
+      end
+    end
+
+    if redirect_hash[:append] && !file.data.nil?
+      file.data += data
+    else
+      file.data = data
+    end
+    nil
   end
 
   def self.command_available?(cmd)
@@ -96,3 +135,4 @@ class Shell
     Commands::STDIN
   end
 end
+
