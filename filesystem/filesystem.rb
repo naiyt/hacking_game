@@ -181,7 +181,14 @@ module Filesystem
     end
 
     def ls
-      @children.keys
+      @children.map.with_object({}) do |(k, v), hash|
+        if v.class == Directory
+          type = :dir
+        else
+          type = :file
+        end
+        hash[k] = type
+      end
     end
 
     def has_directory?(directory)
@@ -215,6 +222,10 @@ module Filesystem
 
     def add_child(*args)
       raise FileNotDir, "#{@name} is a file"
+    end
+
+    def ls
+      { name: :file }
     end
   end
 end

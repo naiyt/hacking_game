@@ -12,9 +12,9 @@ stdin: no
     def run
       begin
         contents = fs.ls_path path
-        contents = contents.select { |d| d[0] != '.' } unless show_hidden?
-        contents = colorize(contents)
-        contents.join delimiter
+        contents = contents.select { |k,_| k[0] != '.' } unless show_hidden?
+        names = colorize(contents)
+        names.join delimiter
       rescue Filesystem::FileDoesNotExistError
         { stderr: "ls #{path}: file or directory does not exist" }
       end
@@ -33,11 +33,11 @@ stdin: no
     end
 
     def colorize(contents)
-      contents.map do |file_obj|
-        if fs.file_type(file_obj) == Filesystem::Directory
-          color_dir(file_obj)
+      contents.map do |name, type|
+        if type == :dir
+          color_dir(name)
         else
-          color_file(file_obj)
+          color_file(name)
         end
       end
     end
