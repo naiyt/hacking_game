@@ -11,8 +11,6 @@ module Scripts
         output "YOU HAVE UNLOCKED 'cat'", :info
 
         expect_cmd_with_args :man, :cat, "READ THE MANUAL FOR 'cat'"
-
-        run_playground
       end
     end
   end

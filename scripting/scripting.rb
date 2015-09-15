@@ -67,6 +67,11 @@ module Scripts
       raise
     end
 
+    def expect_current_user_to_be(user_name, txt=nil)
+      expectation(txt) { @shell.user.name.to_sym == user_name }
+      yield if block_given?
+    end
+
     def run_playground(txt=nil)
       output(txt, :info)
       @shell.run(forever: true)
