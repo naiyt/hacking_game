@@ -22,6 +22,14 @@ module Scripts
       @name = n
     end
 
+    def load_users_file(file_name)
+      Users.reload_users(file_name)
+    end
+
+    def login_as(user_name)
+      @shell.user = Users.users[user_name] # bypasses authentication
+    end
+
     def output(text, type=:standard)
       # sends to the Commands::OutputHelper methods
       puts self.send(type, text) unless text.nil?

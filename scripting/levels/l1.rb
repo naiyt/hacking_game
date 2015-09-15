@@ -4,6 +4,10 @@ module Scripts
       Script.new do
         level_name 'Tutorial'
 
+        load_users_file './scripting/users/l1.yml'
+
+        login_as 'jan'
+
         available_commands [:help, :pwd, :ls, :man, :exit]
 
         output "WELCOME. YOU WILL NOW LEARN THE BASICS OF THIS SYSTEM.", :info

@@ -1,0 +1,8 @@
+---
+root:
+  password: unhackable
+  super_user: true
+jan:
+  password: password
+  super_user: false
+

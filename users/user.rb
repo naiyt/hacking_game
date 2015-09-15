@@ -9,8 +9,12 @@ module Users
     @users ||= load_users
   end
 
-  def self.load_users
-    data = YAML.load_file('./users/passwd.yml')
+  def self.reload_users(users_file)
+    @users = load_users(users_file)
+  end
+
+  def self.load_users(users_file='./users/passwd.yml')
+    data = YAML.load_file(users_file)
     data.map.with_object({}) do |(user_name, user_data), hash|
       new_user = User.new(user_name, user_data["password"], user_data["super_user"])
       hash[user_name] = new_user

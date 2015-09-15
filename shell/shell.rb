@@ -6,7 +6,7 @@ require 'highline/import'
 class Shell
   include Commands::OutputHelper
 
-  attr_accessor :history
+  attr_accessor :history, :user
 
   def initialize(user_name, user_pass, debug=false)
     login(user_name, user_pass)
@@ -24,7 +24,7 @@ class Shell
     @user = Users.login(user_name, user_pass)
   end
 
-   def run(forever=true)
+  def run(forever=true)
     @runner.shell = self
     begin
       if forever
