@@ -14,17 +14,17 @@ class Shell
     @runner = Commands::CommandRunner.instance
     @history = []
     @fs = Filesystem::Filesystem.instance
-  end
-
-  def login(user_name, user_pass)
-    Users.login(user_name, user_pass)
   rescue Users::UserDoesNotExistError
     abort("User #{user_name} does not exist")
   rescue Users::InvalidPasswordError
     abort("Invalid password for #{user_name}")
   end
 
-  def run(forever=true)
+  def login(user_name, user_pass)
+    Users.login(user_name, user_pass)
+  end
+
+   def run(forever=true)
     @runner.shell = self
     begin
       if forever
