@@ -13,7 +13,6 @@ TODO next:
     - ssh
     - text editing (scary)
 - Permissions!
-- Users
 - Ablity to cd into sub directories
 - Save state of filesystem
 - Initialize filesystem with text files as well

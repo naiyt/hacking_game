@@ -3,7 +3,7 @@ module Scripts
   Dir['scripting/levels/*.rb'].each { |file| require File.expand_path file }
 
   def self.shell
-    @shell ||= Shell.new
+    @shell ||= Shell.new('nate', 'password') # TODO - actually setup a game user
   end
 
   class Script

@@ -2,5 +2,5 @@ require_relative 'shell/shell'
 
 debug = false
 
-shell = Shell.new(debug=debug)
+shell = Shell.new('nate', 'password', debug=debug)
 shell.run

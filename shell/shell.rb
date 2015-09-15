@@ -1,5 +1,6 @@
 require_relative '../commands/commands_helper'
 require_relative '../filesystem/filesystem'
+require_relative '../users/user'
 require 'highline/import'
 
 class Shell
@@ -7,11 +8,20 @@ class Shell
 
   attr_accessor :history
 
-  def initialize(debug=false)
+  def initialize(user_name, user_pass, debug=false)
+    @user = login(user_name, user_pass)
     @debug = debug
     @runner = Commands::CommandRunner.instance
     @history = []
     @fs = Filesystem::Filesystem.instance
+  end
+
+  def login(user_name, user_pass)
+    Users.login(user_name, user_pass)
+  rescue Users::UserDoesNotExistError
+    abort("User #{user_name} does not exist")
+  rescue Users::InvalidPasswordError
+    abort("Invalid password for #{user_name}")
   end
 
   def run(forever=true)
@@ -55,7 +65,7 @@ class Shell
 
   def prompt
     path = @fs.pwd.path_to
-    "[a13@hacksh #{path}]: "
+    "[#{@user.name}@hacksh #{path}]: "
   end
 
   def format_input(input)
