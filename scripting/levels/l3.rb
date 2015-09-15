@@ -19,9 +19,8 @@ module Scripts
         expect_cmd_with_args :filetype, :"hax.txt", "DISCOVER THE FILETYPE OF 'hax.txt'"
 
         expect_cmd_with_args :filetype, :"tmp", "DISCOVER THE FILETYPE OF 'tmp'"
-
-        run_playground
       end
     end
   end
 end
+
