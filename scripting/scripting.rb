@@ -36,31 +36,22 @@ module Scripts
     end
 
     def expect_cmd(cmd, txt=nil)
-      expectation(txt) do
-        is_latest_cmd?(cmd)
-      end
+      expectation(txt) { is_latest_cmd?(cmd) }
       yield if block_given?
     end
 
     def expect_cmd_with_args(cmd, args, txt=nil)
-      expectation(txt) do
-        args = [args] unless args.is_a? Array
-        is_latest_cmd?(cmd) && is_latest_args?(args)
-      end
+      expectation(txt) { is_latest_cmd?(cmd) && is_latest_args?(Array(args)) }
       yield if block_given?
     end
 
     def expect_pwd_to_be(dir, txt=nil)
-      expectation(txt) do
-        @fs.pwd.path_to == dir
-      end
+      expectation(txt) { @fs.pwd.path_to == dir }
       yield if block_given?
     end
 
     def expect_file_to_exist(filepath, txt=nil)
-      expectation(txt) do
-        @fs.file_exists?(filepath)
-      end
+      expectation(txt) { @fs.file_exists?(filepath) }
       yield if block_given?
     end
 
