@@ -9,7 +9,7 @@ class Shell
   attr_accessor :history
 
   def initialize(user_name, user_pass, debug=false)
-    @user = login(user_name, user_pass)
+    login(user_name, user_pass)
     @debug = debug
     @runner = Commands::CommandRunner.instance
     @history = []
@@ -21,7 +21,7 @@ class Shell
   end
 
   def login(user_name, user_pass)
-    Users.login(user_name, user_pass)
+    @user = Users.login(user_name, user_pass)
   end
 
    def run(forever=true)
