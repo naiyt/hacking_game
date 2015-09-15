@@ -1,17 +1,22 @@
-# hacking_game
+# Shell Emulator
 
-A super basic shell and filesystem emulation currently. All commands are shell builtins. No forking or threading. The "filesystem" is really nothing more then a few objects that emulate the basic structure of a *nix FS. All of it is just stored in memory.
+A super basic shell and filesystem emulation for a *nix type OS. All commands are shell builtins. No forking or threading. The "filesystem" is really nothing more then a few objects that emulate the basic structure of a *nix FS.
 
-Commands all support basic piping of stdout/stdin to other commands with |. (e.g., `time | grep 19`.)
+Commands all support basic piping with | and redirection with > and >>.
 
 TODO next:
 - commands:
     - rm
-- cd into multiple directories
-- save state of filesystem
-- multiple commands with ; or && (but not chaining stdout/stdin)
-- better support for renaming commands (e.g., say I don't want to call the manual pages command by its typical name)
-- consider using curses
-- permissions
-- better arg handling
-- refresh fs state after each spec (too much pollution at the moment)
+    - rmdir
+    - whoami
+    - mail
+    - ssh
+    - text editing (scary)
+- Permissions!
+- Users
+- Ablity to cd into sub directories
+- Save state of filesystem
+- Initialize filesystem with text files as well
+- Multiple commands with ; or &&
+- Better support for renaming commands (e.g., say I don't want to call the manual pages command by its typical name)
+- Better arg handling
