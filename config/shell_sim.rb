@@ -1,5 +1,5 @@
 require 'yaml'
-require 'shell-sim'
+require 'shell_sim'
 
 ShellSim.configure do |config|
   config.fs_data    = YAML.load_file('config/fs.yml')

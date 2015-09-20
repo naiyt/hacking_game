@@ -1,0 +1,8 @@
+---
+root:
+  password: password
+  super_user: true
+nate:
+  password: password
+  super_user: false
+
