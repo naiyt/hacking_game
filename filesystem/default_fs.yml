@@ -1,7 +1,0 @@
----
-root:
-  - tmp
-  - usr:
-    - bin
-  - etc
-  - home
