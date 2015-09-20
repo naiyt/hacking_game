@@ -1,8 +1,8 @@
 GIT
   remote: git@github.com:naiyt/shell-sim.git
-  revision: 7e0b71a23528f5bdf89ee8d110abc0beec470e85
+  revision: eceea635043b122309b427cd0419ee2880a15327
   specs:
-    shell-sim (0.0.1)
+    shell_sim (0.0.1)
       colorize
       highline
 
@@ -16,4 +16,4 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  shell-sim!
+  shell_sim!
