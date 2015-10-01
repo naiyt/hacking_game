@@ -4,9 +4,9 @@ module Scripts
       Script.new do
         level_name 'Tutorial'
 
-        load_users_file './scripting/users/l1.yml'
+        # load_users_file './scripting/users/l1.yml'
 
-        login_as 'jan'
+        # login_as 'jan'
 
         available_commands [:help, :pwd, :ls, :man, :exit]
 
