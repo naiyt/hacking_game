@@ -4,10 +4,6 @@ module Scripts
       Script.new do
         level_name 'Logging in as users'
 
-        load_users_file './scripting/users/l1.yml'
-
-        login_as 'jan'
-
         available_commands [:help, :pwd, :ls, :man, :exit, :cd, :touch, :filetype, :cat, :login]
 
         output "YOU HAVE UNLOCKED 'login'", :info
