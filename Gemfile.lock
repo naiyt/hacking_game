@@ -1,6 +1,6 @@
 GIT
   remote: git@github.com:naiyt/shell-sim.git
-  revision: f6bdfdd337ea39bc4a5188c9576aa64d1fc33b7d
+  revision: d191efa5cbfb4bf23e9431900a6a2a5a8c5aac8e
   specs:
     shell_sim (0.0.1)
       colorize
