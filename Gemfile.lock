@@ -1,6 +1,6 @@
 GIT
   remote: git@github.com:naiyt/shell-sim.git
-  revision: 5c040c30ed1a57d2821b52d9dc2f9122569fceb8
+  revision: 5bc14e519b21bf9ff04e34e75c3764f095f84590
   specs:
     shell_sim (0.0.1)
       colorize
@@ -9,11 +9,19 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    coderay (1.1.0)
     colorize (0.7.7)
     highline (1.7.7)
+    method_source (0.8.2)
+    pry (0.10.1)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+    slop (3.6.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  pry
   shell_sim!
