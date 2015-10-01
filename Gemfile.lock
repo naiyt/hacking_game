@@ -1,6 +1,6 @@
 GIT
   remote: git@github.com:naiyt/shell-sim.git
-  revision: 16b358abc8a08f2265f540d830b6a0ddcdaa9dc6
+  revision: 5c040c30ed1a57d2821b52d9dc2f9122569fceb8
   specs:
     shell_sim (0.0.1)
       colorize
@@ -10,7 +10,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     colorize (0.7.7)
-    highline (1.7.6)
+    highline (1.7.7)
 
 PLATFORMS
   ruby
