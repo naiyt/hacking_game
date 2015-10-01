@@ -1,6 +1,7 @@
 require_relative 'config/shell_sim'
 require 'optparse'
 require 'pry'
+require 'yaml'
 
 options = {}
 OptionParser.new do |opts|

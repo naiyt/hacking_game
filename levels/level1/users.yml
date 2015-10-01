@@ -1,0 +1,9 @@
+---
+root:
+  password: password
+  super_user: false
+
+jc:
+  password: password
+  super_user: false
+
