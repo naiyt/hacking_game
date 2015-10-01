@@ -24,7 +24,7 @@ def load_level(level_name)
   load "#{File.dirname(__FILE__)}/levels/#{level_name}/#{level_name}.rb"
 end
 
-def levels(level_names)
+def get_levels(level_names)
   # Load specified levels (use standard of levels/leveln/leveln.rb)
   level_names.map { |level_title| load_level(level_title) }
 
@@ -32,9 +32,13 @@ def levels(level_names)
   level_names.map { |level| get_class(level.to_sym) }
 end
 
+
 if options[:all]
-  Scripts.play_game
+  level_names = Dir.entries("levels").reject { |dir| dir[0] == '.' }
 else
-  levels(options[:levels]).each(&:play)
+  level_names = options[:levels]
 end
+
+levels = get_levels(level_names)
+levels.each(&:play)
 
