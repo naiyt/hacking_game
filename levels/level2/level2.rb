@@ -1,3 +1,7 @@
+# Goals of this level:
+# Teach the following commands:
+# time, ls, pwd
+
 module ShellSim
   module Scripts
     module Level2
@@ -5,21 +9,15 @@ module ShellSim
         Script.new do
           level_name 'Level 2'
 
-          available_commands [:help, :pwd, :ls, :man, :exit, :cd]
+          available_commands [:help, :man, :time, :ls, :pwd]
 
-          output "COMMAND(S) UNLOCKED: 'cd'", :info
+          output "Command(s) unlocked: time, ls, pwd", :info
 
-          output "YOU MUST LEARN TO NAVIGATE THE FILESYSTEM.", :info
+          expect_cmd :time, "Certain commands take 'arguments', like 'man'. Other commands do not. One example is the 'time' command. Use it now."
 
-          expect_cmd_with_args :man, :cd, "READ THE MANUAL FOR 'cd'"
+          expect_cmd :ls, "The shell lets you view and interact with files and directories. To view the contents of the current directory use the 'ls' command."
 
-          expect_pwd_to_be "/tmp", "CHANGE DIRECTORIES TO /tmp"
-
-          output "YOU CAN NAVIGATE TO A DIRECTORY'S PARENT BY USING .. OR TYPING ITS FULL PATH", :info
-
-          expect_pwd_to_be "/", "NAVIGATE TO / WITH EITHER 'cd ..' OR 'cd /tmp'"
-
-          output "FIN."
+          expect_cmd :pwd, "Before we learn how to navigate the filesystem, it is important to know how to identify your current location -- this is viewable in your command prompt. You can also use the 'pwd' command. Do so now."
         end
       end
     end
