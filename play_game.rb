@@ -18,7 +18,7 @@ end.parse!
 
 def get_class(cls_sym)
   cls_name = cls_sym.capitalize
-  "Scripts::#{cls_name}".split("::").inject(Object) { |o,c| o.const_get c }
+  "ShellSim::Scripts::#{cls_name}".split("::").inject(Object) { |o,c| o.const_get c }
 end
 
 def load_level(level_name)
