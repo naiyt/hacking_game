@@ -1,3 +1,7 @@
+# Goals of this level:
+# Teach the following commands:
+# task, help, man
+
 module ShellSim
   module Scripts
     module Level1
@@ -9,21 +13,21 @@ module ShellSim
 
           login_as 'jc'
 
-          available_commands [:help, :pwd, :ls, :man, :exit]
+          available_commands [:help, :man]
 
-          output "WELCOME. YOU WILL NOW LEARN THE BASICS OF THIS SYSTEM.", :info
+          output "Loading tutorial..."
 
-          expect_cmd :help, "USE 'help' TO SHOW AVAILABLE COMMANDS." do
-            output 'SUCCESS. PROVE YOUR SKILL TO GAIN MORE COMMANDS.', :info
+          output "You will now be guided through command line basics.", :info
+
+          expect_cmd :task, "If at any time you forget your current task, use the command 'task' to receive a reminder. Do so now." do
+            output "Well done."
           end
 
-          output "USE THE COMMAND 'task' IF YOU FORGET YOUR CURRENT GOAL.", :info
+          expect_cmd :help, "Throughout this tutorial you will add new commands to your arsenal. Use the command 'help' to list all of your available commands."
 
-          expect_cmd :pwd, "USE 'pwd' TO PRINT YOUR CURRENT LOCATION. YOUR LOCATION IS ALSO SHOWN IN THE PROMPT."
+          expect_cmd_with_args :man, :man, "Each command comes with a 'manual'. You can read a commands manual page with the 'man' command. For example, to read the manual for the command 'help' you would use the command 'man help'. Read the manual page for the 'man' command."
 
-          expect_cmd :ls, "'ls' WILL LIST THE CONTENTS OF A DIRECTORY."
-
-          expect_cmd_with_args :man, [:ls], "USE 'man' TO READ THE MANUAL PAGE FOR THE COMMAND 'ls'"
+          output "Level 1 of the tutorial has been completed. Be sure to remember the commands 'help', 'task', and 'man'.", :info
         end
       end
     end
