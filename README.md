@@ -1,5 +1,18 @@
 # Hacking Game
 
-TODO:
+To teach:
 
-  - Fix user and fs loading
+task
+help
+man
+time
+ls
+pwd
+cd
+touch
+mkdir
+filetype
+echo
+cat
+grep
+
